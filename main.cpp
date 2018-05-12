@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+
 #include "InputParser.h"
 
 using namespace std;

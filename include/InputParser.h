@@ -4,12 +4,15 @@
 #define INPUTPARSER_H
 
 #include <fstream>
+#include <iostream>
+
 
 
 
 class InputParser
 {
     public:
+        int c,d;
         InputParser();
         virtual ~InputParser();
         void read();
