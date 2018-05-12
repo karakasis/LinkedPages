@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1526139431 source:c:\users\philip\desktop\domes_ergasia\linkedpages\src\array.cpp
+	"Array.h"
+
+1526140358 c:\users\philip\desktop\domes_ergasia\linkedpages\include\array.h
+
+1526140900 source:c:\users\philip\desktop\domes_ergasia\linkedpages\src\inputparser.cpp
+	"InputParser.h"
+	<fstream>
+	<iostream>
+
+1526140706 c:\users\philip\desktop\domes_ergasia\linkedpages\include\inputparser.h
+	<fstream>
+
+1526141277 source:c:\users\philip\desktop\domes_ergasia\linkedpages\main.cpp
+	<iostream>
+	"InputParser.h"
+
+1526141277 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\new_avl\linkedpages\main.cpp
+	<iostream>
+	"InputParser.h"
+
+1526140706 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\new_avl\linkedpages\include\inputparser.h
+	<fstream>
+
+1526139431 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\new_avl\linkedpages\src\array.cpp
+	"Array.h"
+
+1526140358 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\new_avl\linkedpages\include\array.h
+
+1526144829 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\new_avl\linkedpages\src\inputparser.cpp
+	"InputParser.h"
+	<fstream>
+	<iostream>
+
