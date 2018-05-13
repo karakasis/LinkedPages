@@ -17,14 +17,17 @@ class Array
         void printer();
 
 
+
     protected:
 
     private:
-        //std::vector< int > pages;
-        //std::vector< int > links;
+        std::vector< int > pages;
+        std::vector< int > links;
         std::vector< std::vector<int> > pairs;
         //std::vector<int> initVector(int link);
         std::vector<int> getLinkedPages(int page);
+        int binarySearch(vector<int> arr, int l, int r, int x);
+
 
 };
 

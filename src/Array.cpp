@@ -19,7 +19,8 @@ Array::~Array()
 }
 
 std::vector<int> getLinkedPages(std::vector<int> linkedPages){
-    linkedPages.erase(0);
+
+    linkedPages.erase(linkedPages.begin());
     return linkedPages;
 }
 
@@ -39,34 +40,40 @@ std::vector<int> Array::initVector(int link){
 }
 */
 
-void Array::makePair(int linkPage, int link){
-    bool contains = false;
+void Array::makePair(int page, int link){
+    int contains;
+    /*
     for ( std::vector<int>  &node : pairs )
     {
 
-       if(node[0] == linkPage){
+       if(node[0] == page){
             //std::vector<int> linkedPages = getLinkedPages(node);
             node.push_back(link);
             contains = true;
             break;
        }
     }
-    if(contains == false){
+    */
+    contains = binarySearch(pairs,0,pairs.size()-1,page);
+    if(contains == -1){
 
         std::vector<int> aPair;
-        aPair.push_back(linkPage);
+        aPair.push_back(page);
         aPair.push_back(link);
         pairs.push_back(aPair);
+    }
+    else{
+         pairs[contains].push_back(link);
     }
 }
 
 void Array::show(){
     int i;
 
-    for(std::pair<int,std::vector<int>> &node : pairs){
-        std::cout<<"["<<node.first<<"] -> [";
-        for(int &link : node.second){
-            std::cout<<" "<<link;
+    for(std::vector<int> &node : pairs){
+        std::cout<<"["<<node[0]<<"] -> [";
+        for(int i=1;i<node.size();i=i+1){
+            std::cout<<" "<<node[i];
         }
         std::cout<<" ]"<<std::endl;
     }
@@ -85,13 +92,13 @@ void Array::printer(){
         //p.units = "MB";
         //p.start();
 
-    for(std::pair<int,std::vector<int>> &node : pairs){
+    for(std::vector<int> &node : pairs){
         s.str("");
         s.clear();
 
-        s << node.first << "," << node.second.size() ;
-        for(int &link : node.second){
-            s << "," << link ;
+        s << node[0] << "," << node.size()-1 ;
+        for(int i=1;i<node.size();i=i+1){
+            s << "," << node[i] ;
         }
         s << "\n" ;
         std::string line(s.str());
@@ -102,4 +109,29 @@ void Array::printer(){
     }
 
     myfile.close();
+}
+
+int Array::binarySearch(vector<int> arr, int l, int r, int x){
+     if (r >= l)
+   {
+        int mid = l + (r - l)/2;
+
+        // If the element is present at the middle
+        // itself
+        if (arr[mid] == x)
+            return mid;
+
+        // If element is smaller than mid, then
+        // it can only be present in left subarray
+        if (arr[mid] > x)
+            return binarySearch(arr, l, mid-1, x);
+
+        // Else the element can only be present
+        // in right subarray
+        return binarySearch(arr, mid+1, r, x);
+   }
+
+   // We reach here when element is not
+   // present in array
+   return -1;
 }
