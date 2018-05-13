@@ -41,7 +41,6 @@ std::vector<int> Array::initVector(int link){
 */
 
 void Array::makePair(int page, int link){
-    int contains;
     /*
     for ( std::vector<int>  &node : pairs )
     {
@@ -54,8 +53,8 @@ void Array::makePair(int page, int link){
        }
     }
     */
-    contains = binarySearch(pairs,0,pairs.size()-1,page);
-    if(contains == -1){
+    int pos = binarySearch(pairs,0,pairs.size()-1,page);
+    if(pos == -1){
 
         std::vector<int> aPair;
         aPair.push_back(page);
@@ -63,7 +62,7 @@ void Array::makePair(int page, int link){
         pairs.push_back(aPair);
     }
     else{
-         pairs[contains].push_back(link);
+         pairs[pos].push_back(link);
     }
 }
 
@@ -111,19 +110,19 @@ void Array::printer(){
     myfile.close();
 }
 
-int Array::binarySearch(vector<int> arr, int l, int r, int x){
+int Array::binarySearch(vector<vector<int>> arr, int l, int r, int x){
      if (r >= l)
    {
         int mid = l + (r - l)/2;
 
         // If the element is present at the middle
         // itself
-        if (arr[mid] == x)
+        if (arr[mid][0] == x)
             return mid;
 
         // If element is smaller than mid, then
         // it can only be present in left subarray
-        if (arr[mid] > x)
+        if (arr[mid][0] > x)
             return binarySearch(arr, l, mid-1, x);
 
         // Else the element can only be present

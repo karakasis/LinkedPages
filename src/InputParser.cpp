@@ -32,7 +32,7 @@ void InputParser::read(){
         infile.seekg(0, ios_base::beg);
 
         ez::ezRateProgressBar<int> p(_length);
-        p.units = "MB";
+        p.units = "Char";
         p.start();
 
         if(infile.is_open()){

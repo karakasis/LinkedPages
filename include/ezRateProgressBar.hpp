@@ -64,6 +64,18 @@ public:
     }
   }
 
+  void toStr(T v, std::string & str) {
+    std::ostringstream stm;
+    if (v >= 1) {
+      stm << (long long)v;
+      str = stm.str();
+    }
+    else {
+      stm << std::fixed << std::setprecision(3) << v;
+      str = stm.str();
+    }
+  }
+
   // http://stackoverflow.com/questions/3283804/c-get-milliseconds-since-some-date
   long long osQueryPerfomance() {
   #ifdef WIN32
@@ -102,10 +114,10 @@ public:
     else
       unprocColWidth = 11;
 
-    out.append(procColWidth-9, ' ');
-    out.append("Processed | ");
-    out.append(unprocColWidth-11, ' ');
-    out.append("Unprocessed | Rate\n");
+    out.append(procColWidth-6, ' ');
+    out.append("Parsed | ");
+    out.append(unprocColWidth-7, ' ');
+    out.append("Pending | Rate\n");
 
     printf("%s", out.c_str());
   }
@@ -203,29 +215,29 @@ public:
       secondsToString((unsigned int)eta, tstr);
       out.append(tstr);
       out.append(" | ");
-      commaNumber(cur, tstr);
+      toStr(cur, tstr);
       pad = procColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
-      out.append(tstr);
+      out.append(tstr); //proc
       out.append(" ");
       out.append(units);
       out.append(" | ");
-      commaNumber(n-cur, tstr);
+      toStr(n-cur, tstr);
       pad = unprocColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
-      out.append(tstr);
+      out.append(tstr); //unproc
       out.append(" ");
       out.append(units);
       out.append(" | ");
       eta = cur/dt;
       if (eta > 1.0)
-        commaNumber((unsigned int)eta, tstr);
+        toStr((unsigned int)eta, tstr);
       else {
         std::ostringstream stm;
         stm << eta;
         tstr = stm.str();
       }
-      out.append(tstr);
+      out.append(tstr); //rate
       out.append(" ");
       out.append(units);
       out.append("/s");
