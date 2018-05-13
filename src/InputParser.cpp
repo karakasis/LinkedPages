@@ -26,7 +26,7 @@ void InputParser::read(){
         //Array links;
         std::fstream infile;
 
-        infile.open("input.txt",std::fstream::in|std::fstream::ate);
+        infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
         infile.seekg(0,ios_base::end);
         _length = infile.tellg();
         infile.seekg(0, ios_base::beg);
@@ -50,7 +50,16 @@ void InputParser::read(){
         else{
             cout<<"File could not open properly"<<endl;
         }
-        //arr.show();
+        arr.sortLinks();
+        //  ~TEST~
+        arr.deleteLink(0,3);
+        arr.deleteLink(7,3);
+        arr.deleteLink(1,12);
+        arr.insertLink(0,3);
+        arr.insertLink(12,0);
+        arr.insertLink(0,0);
+        arr.show();
+        //  ~TEST~
         arr.printer();
         //links.show();
 

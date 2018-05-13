@@ -15,6 +15,10 @@ class Array
         void makePair(int linkPage, int link);
         void show();
         void printer();
+        void sortLinks();
+        void deleteLink(int page, int link);
+        void insertLink(int page, int link);
+
 
 
 
@@ -27,6 +31,12 @@ class Array
         //std::vector<int> initVector(int link);
         std::vector<int> getLinkedPages(int page);
         int binarySearch(std::vector<std::vector<int>> arr, int l, int r, int x);
+        void swap1d(int *xp, int *yp);
+       // void swap2d(std::vector *xp, std::vector *yp);
+        void bubbleSort1d(std::vector<int> &arr, int n);
+        void bubbleSort2d(std::vector<std::vector<int>> &arr, int n);
+        int binarySearch1D(std::vector<int> arr, int l, int r, int x);
+
 
 
 };
