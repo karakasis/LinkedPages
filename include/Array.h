@@ -10,14 +10,21 @@ class Array
     public:
         Array();
         virtual ~Array();
-        void insertLink(int page1);
+        void insertPage(int page);
+        void insertLink(int link);
+        void makePair(int linkPage, int link);
         void show();
+        void printer();
 
 
     protected:
 
     private:
-        std::vector <int> links;
+        std::vector< int > pages;
+        std::vector< int > links;
+        std::vector< std::pair< int, std::vector<int> > > pairs;
+
+        std::vector<int> initVector(int link);
 
 };
 
