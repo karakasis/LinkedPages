@@ -36,12 +36,12 @@ void InputParser::read(){
         p.start();
 
         if(infile.is_open()){
-            cout<<"File opened successfully"<<endl;
+            //cout<<"File opened successfully"<<endl;
 
             while(infile >> c >> d){
                 //arr.insertPage(c);
                 //arr.insertLink(d);
-                //arr.makePair(c,d);
+                arr.makePair(c,d);
                 _last = infile.tellg();
                 p.update(_last);
             }

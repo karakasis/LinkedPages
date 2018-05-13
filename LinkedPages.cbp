@@ -22,6 +22,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="1" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
@@ -37,6 +38,7 @@
 		</Compiler>
 		<Unit filename="include/Array.h" />
 		<Unit filename="include/InputParser.h" />
+		<Unit filename="include/ezRateProgressBar.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Array.cpp" />
 		<Unit filename="src/InputParser.cpp" />
