@@ -18,6 +18,11 @@ Array::~Array()
     //dtor
 }
 
+std::vector<int> getLinkedPages(std::vector<int> linkedPages){
+    linkedPages.erase(0);
+    return linkedPages;
+}
+
 void Array::insertPage(int page){
     pages.push_back(page);
 }
@@ -26,26 +31,32 @@ void Array::insertLink(int link){
     links.push_back(link);
 }
 
+/*
 std::vector<int> Array::initVector(int link){
     std::vector< int > linksVector;
     linksVector.push_back(link);
     return linksVector;
 }
+*/
 
 void Array::makePair(int linkPage, int link){
     bool contains = false;
-    for ( std::pair< int , std::vector<int> > &node : pairs )
+    for ( std::vector<int>  &node : pairs )
     {
 
-       if(node.first == linkPage){
-            node.second.push_back(link);
+       if(node[0] == linkPage){
+            //std::vector<int> linkedPages = getLinkedPages(node);
+            node.push_back(link);
             contains = true;
             break;
        }
     }
     if(contains == false){
 
-        pairs.push_back(std::make_pair(linkPage,initVector(link)));
+        std::vector<int> aPair;
+        aPair.push_back(linkPage);
+        aPair.push_back(link);
+        pairs.push_back(aPair);
     }
 }
 
