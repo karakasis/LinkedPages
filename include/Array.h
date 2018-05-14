@@ -36,6 +36,7 @@ class Array
         void bubbleSort1d(std::vector<int> &arr, int n);
         void bubbleSort2d(std::vector<std::vector<int>> &arr, int n);
         int binarySearch1D(std::vector<int> arr, int l, int r, int x);
+        void reAllocVector();
 
 
 

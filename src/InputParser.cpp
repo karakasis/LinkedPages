@@ -42,7 +42,23 @@ Array InputParser::readToArray(){
         Array arr;
         int _last;
 
-        std::fstream infile = startLoader();
+        //std::fstream infile = startLoader();
+
+
+        int _length;
+
+    std::fstream infile;
+    infile.open("input.txt",std::fstream::in|std::fstream::ate);
+
+    infile.seekg(0,ios_base::end);
+    _length = infile.tellg();
+    _length = sizeof(char) * _length * 0.001;
+    infile.seekg(0, ios_base::beg);
+
+    ez::ezRateProgressBar<int> p(_length);
+    p.units = "KB";
+    p.start();
+
 
         if(infile.is_open()){
             //cout<<"File opened successfully"<<endl;
@@ -72,7 +88,7 @@ Array InputParser::readToArray(){
         arr.insertLink(12,0);
         arr.insertLink(0,0);
 
-        arr.show();
+        //arr.show();
         //  ~TEST~
         arr.printer();
         //links.show();
