@@ -22,7 +22,7 @@ std::fstream InputParser::startLoader(){
     int _length;
 
     std::fstream infile;
-    infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
 
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
@@ -76,6 +76,6 @@ Array InputParser::readToArray(){
         //  ~TEST~
         arr.printer();
         //links.show();
-
+        cin.get();
         return arr;
 }

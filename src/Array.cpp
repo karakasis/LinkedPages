@@ -11,6 +11,10 @@ using namespace std;
 Array::Array()
 {
     //ctor
+    //std::vector<std::vector<int>> pairs(300, std::vector<int>(10));
+
+    pairs.reserve(300);
+    //pairs(300);
 }
 
 Array::~Array()
@@ -53,6 +57,24 @@ void Array::makePair(int page, int link){
        }
     }
     */
+    cout<<pairs.size()<<" is size"<<endl;
+    if(pairs.size() <= page){ // then pairs doesnt include page
+        std::vector<int> aPair;
+        aPair.push_back(page);
+        aPair.push_back(link);
+        pairs.push_back(aPair);
+    }else{
+        if(pairs.at(page).empty()){
+            std::vector<int> aPair;
+            aPair.push_back(page);
+            aPair.push_back(link);
+            pairs.insert(pairs.begin() + page,aPair);
+        }else{
+            //TODO check if we need to have only 1 copy of an ID and not multiple, will raise complexity by n
+            pairs.at(page).push_back(link);
+        }
+    }
+    /*
     int pos = binarySearch(pairs,0,pairs.size()-1,page);
     if(pos == -1){
 
@@ -66,6 +88,7 @@ void Array::makePair(int page, int link){
     else{
          pairs[pos].push_back(link);
     }
+    */
 }
 
 void Array::show(){

@@ -62,43 +62,60 @@ map<Commands, string> s_mapCommandsToString
 void Controller::readCommands(){
     ifstream infile("commands.txt");
     string cmd;
-    //stringstream ss;
+    stringstream ss;
     //infile.open("commands.txt",fstream::in);
-
+    /*
     if(infile.is_open()){
         while(getline(infile, cmd)){
                 cout<<cmd;
             //stringstream ss(cmd);
-            stringstream ss;
+            //stringstream ss;
             //ss << cmd;
-            ss.str("");
-            ss.clear();
-            ss << cmd << endl;
-            executeCommand(ss);
+            //ss.str("");
+            //ss.clear();
+            //ss << cmd << endl;
+            //vector<int> ints;  //container to store ints
+    //vector<string> strings;  //container to store strings
+            //split(cmd.c_str(),ints,strings);
+            executeCommand(cmd.c_str());
         }
     }
+    */
+    executeCommand(cmd.c_str());
 }
 
-void Controller::executeCommand(stringstream& cmd_ss){
-
+void Controller::executeCommand(const char *cmd_ss){
+    InputParser parser;
+    arr = parser.readToArray();
+    /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings
+    istringstream ss( cmd_ss );
+    cout<<cmd_ss;
+    std::istringstream buf(cmd_ss);
+    std::istream_iterator<std::string> beg(buf), end;
 
+    std::vector<std::string> tokens(beg, end); // done!
+
+    for(auto& s: tokens)
+        std::cout << '"' << s << '"' << '\n';
+        //comment above while
     while(true) {
       int intValue;
-      string stringValue;
-      if(cmd_ss.eof())
+      char* stringValue;
+      if(ss.eof())
         break;
 
-      if(cmd_ss >> intValue) {
+      if(ss >> intValue) {
         ints.push_back(intValue);
-      } else if (cmd_ss >> stringValue) {
+      } else if (ss >> stringValue) {
         strings.push_back(stringValue);
       } else {
         cout << "Error: unknown value read in, not recognized as int or string" << endl;
         exit(-1);
       }
     }
+
 
     Commands cmd = s_mapStringToCommands[strings.at(0)];
 
@@ -159,5 +176,37 @@ void Controller::executeCommand(stringstream& cmd_ss){
 
             }
     }
+    */
 }
 
+vector<string> Controller::split(const char *str, vector<int> &ints, vector<string> &strings)
+{
+
+    vector<string> result;
+    char space = ' ';
+    char tab = '\t';
+    int i =0;
+    /*
+        const char *begin = str;
+
+        while( (*str != space || *str!= tab ) && *str){//look for string command
+           cout<<"["<< *str<<"]";
+           str++;
+           i++;
+        }
+        strings.push_back(string(begin, str));
+        string test = &str.substr(i);
+        cout<<"["<<test<<"]";
+        istringstream is( test );
+        int n;
+        while( is >> n ) {
+             // do something with n
+             ints.push_back(n);
+        }
+
+
+*/
+
+    return result;
+
+}

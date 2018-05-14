@@ -15,11 +15,12 @@ class Controller
 
     private:
         void readCommands();
-        void executeCommand(std::stringstream& cmd);
+        void executeCommand(const char *cmd);
         int argSwitch;
         //enum class Commands;
         //std::map<std::string, Commands> s_mapStringToCommands;
         Array arr;
+        std::vector<std::string> split(const char *str, std::vector<int> &ints, std::vector<std::string> &strings);
 };
 
 #endif // CONTROLLER_H
