@@ -18,22 +18,31 @@ InputParser::~InputParser()
     //dtor
 }
 
-void InputParser::read(){
+std::fstream InputParser::startLoader(){
+    int _length;
+
+    std::fstream infile;
+    infile.open("input.txt",std::fstream::in|std::fstream::ate);
+
+    infile.seekg(0,ios_base::end);
+    _length = infile.tellg();
+    _length = sizeof(char) * _length * 0.001;
+    infile.seekg(0, ios_base::beg);
+
+    ez::ezRateProgressBar<int> p(_length);
+    p.units = "KB";
+    p.start();
+
+    return infile;
+}
+
+
+Array InputParser::readToArray(){
 
         Array arr;
-        int _length, _last;
-        //arr = new Array();
-        //Array links;
-        std::fstream infile;
+        int _last;
 
-        infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-        infile.seekg(0,ios_base::end);
-        _length = infile.tellg();
-        infile.seekg(0, ios_base::beg);
-
-        ez::ezRateProgressBar<int> p(_length);
-        p.units = "Char";
-        p.start();
+        std::fstream infile = startLoader();
 
         if(infile.is_open()){
             //cout<<"File opened successfully"<<endl;
@@ -43,6 +52,7 @@ void InputParser::read(){
                 //arr.insertLink(d);
                 arr.makePair(c,d);
                 _last = infile.tellg();
+                _last = sizeof(char) * _last * 0.001;
                 p.update(_last);
             }
 
@@ -52,17 +62,20 @@ void InputParser::read(){
         }
         arr.sortLinks();
         //  ~TEST~
+
         arr.deleteLink(0,3);
+        arr.deleteLink(0,0);
         arr.deleteLink(7,3);
         arr.deleteLink(1,12);
+        arr.deleteLink(0,1);
         arr.insertLink(0,3);
         arr.insertLink(12,0);
         arr.insertLink(0,0);
+
         arr.show();
         //  ~TEST~
         arr.printer();
         //links.show();
 
-
-
+        return arr;
 }

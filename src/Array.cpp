@@ -18,7 +18,7 @@ Array::~Array()
     //dtor
 }
 
-std::vector<int> getLinkedPages(std::vector<int> linkedPages){
+std::vector<int> Array::getLinkedPages(std::vector<int> linkedPages){
 
     linkedPages.erase(linkedPages.begin());
     return linkedPages;
@@ -84,7 +84,7 @@ void Array::printer(){
     ofstream myfile;
     std::string line;
     ostringstream s;
-    myfile.open ("arrays_printer.txt");
+    myfile.open ("output.txt");
 
     //int _last,_length;
     //_last = 0;
@@ -190,9 +190,10 @@ void Array::bubbleSort2d(vector<vector<int>> &arr, int n){
 void Array::deleteLink(int page, int link){
     int posPage = binarySearch(pairs,0,pairs.size()-1,page);
     if(posPage!=-1){
-        int posLink = binarySearch1D(pairs[posPage],0,pairs[0].size()-1,link);
+        std::vector<int> trimNode = getLinkedPages(pairs[posPage]);
+        int posLink = binarySearch1D(trimNode,0,trimNode.size()-1,link);
         if(posLink!=-1){
-            pairs[posPage].erase(pairs[posPage].begin() + posLink);
+            pairs[posPage].erase(pairs[posPage].begin() + posLink + 1);
             cout<<"deleted "<<link<<" from page "<<page<<endl;
             bubbleSort1d(pairs[posPage],pairs[posPage].size());
         }else{
@@ -207,12 +208,12 @@ void Array::deleteLink(int page, int link){
 void Array::insertLink(int page, int link){
     int posPage = binarySearch(pairs,0,pairs.size()-1,page);
     if(posPage!=-1){
-        int posLink = binarySearch1D(pairs[posPage],0,pairs[0].size()-1,link);
+        std::vector<int> trimNode = getLinkedPages(pairs[posPage]);
+        int posLink = binarySearch1D(trimNode,0,trimNode.size()-1,link);
         if(posLink!=-1){
             cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
 
         }else{
-            //pairs[posPage].erase(pairs[posPage].begin() + posLink);
             pairs[posPage].push_back(link);
             bubbleSort1d(pairs[posPage],pairs[posPage].size());
             cout<<"added link "<<link<<" in page "<<page<<endl;

@@ -215,14 +215,14 @@ public:
       secondsToString((unsigned int)eta, tstr);
       out.append(tstr);
       out.append(" | ");
-      toStr(cur, tstr);
+      commaNumber(cur, tstr);
       pad = procColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
       out.append(tstr); //proc
       out.append(" ");
       out.append(units);
       out.append(" | ");
-      toStr(n-cur, tstr);
+      commaNumber(n-cur, tstr);
       pad = unprocColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
       out.append(tstr); //unproc
@@ -231,7 +231,7 @@ public:
       out.append(" | ");
       eta = cur/dt;
       if (eta > 1.0)
-        toStr((unsigned int)eta, tstr);
+        commaNumber((unsigned int)eta, tstr);
       else {
         std::ostringstream stm;
         stm << eta;

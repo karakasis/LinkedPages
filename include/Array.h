@@ -29,7 +29,7 @@ class Array
         std::vector< int > links;
         std::vector< std::vector<int> > pairs;
         //std::vector<int> initVector(int link);
-        std::vector<int> getLinkedPages(int page);
+        std::vector<int> getLinkedPages(std::vector<int> linkedPages);
         int binarySearch(std::vector<std::vector<int>> arr, int l, int r, int x);
         void swap1d(int *xp, int *yp);
        // void swap2d(std::vector *xp, std::vector *yp);

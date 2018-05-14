@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "InputParser.h"
+#include "Controller.h"
 
 using namespace std;
 
@@ -12,31 +12,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    switch(atoi(argv[1])){
-        case 1 :
-            {
-            //kataskevi antikeimenou array
-            cout<<"array"<<endl;
-            InputParser parser;
-            parser.read();
-            break;
-            }
-        case 2:
-            {
-            //AVL
-            cout<<"AVL"<<endl;
-            break;
-            }
-        case 3:
-            {
-            //hashtable
-            cout<<"hashtable"<<endl;
-            break;
-            }
-        default:
-            cout<<"Invalid user input.";
-
-    }
+    Controller(atoi(argv[1]));
 
     //cout<<argc<<" "<<argv[0]<<" "<<argv[1]<<endl;
     return 0;

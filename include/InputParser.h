@@ -6,6 +6,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "ezRateProgressBar.hpp"
+#include "Array.h"
+
 
 
 
@@ -15,13 +18,14 @@ class InputParser
         int c,d;
         InputParser();
         virtual ~InputParser();
-        void read();
+        Array readToArray();
 
     protected:
 
     private:
         int a,b;
-        //ifstream f;
+        ez::ezRateProgressBar<int> p;
+        std::fstream startLoader();
 
 };
 
