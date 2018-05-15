@@ -10,35 +10,36 @@ class Array
     public:
         Array();
         virtual ~Array();
-        void insertPage(int page);
-        void insertLink(int link);
-        void makePair(int linkPage, int link);
-        void show();
-        void printer();
-        void sortLinks();
         void deleteLink(int page, int link);
         void insertLink(int page, int link);
+        std::vector<int> findNeighbors(std::vector<int> linkedPages);
+        int findNumConnectedComponents();
 
+        void makePair(int linkPage, int link);
+        void show(std::vector<std::vector<int>> vec);
+        void printer();
+        void sortLinks();
+        void sortConnectedLinks();
 
-
+        //put those in private b4 sending
+        std::vector< std::vector<int> > pairs;
+        std::vector< std::vector<int> > connectedPairs;
 
     protected:
 
     private:
-        std::vector< int > pages;
-        std::vector< int > links;
-        std::vector< std::vector<int> > pairs;
-        //std::vector<int> initVector(int link);
-        std::vector<int> getLinkedPages(std::vector<int> linkedPages);
-        int binarySearch(std::vector<std::vector<int>> arr, int l, int r, int x);
-        void swap1d(int *xp, int *yp);
-       // void swap2d(std::vector *xp, std::vector *yp);
-        void bubbleSort1d(std::vector<int> &arr, int n);
-        void bubbleSort2d(std::vector<std::vector<int>> &arr, int n);
-        int binarySearch1D(std::vector<int> arr, int l, int r, int x);
+        void makeConnectedPair(int linkPage, int link);
+        void deleteConnectedLink(int page, int link);
+        void insertConnectedLink(int page, int link);
         void reAllocVector();
+        void reAllocConnectedVector();
 
-
+        void bubbleSort(std::vector<int> &arr, int n);
+        int binarySearch(std::vector<int> arr, int l, int r, int x);
+        void swapCells(int *xp, int *yp);
+        int DFS();
+        void DFSvisit(int u);
+        int *color;
 
 };
 

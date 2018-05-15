@@ -48,7 +48,7 @@ Array InputParser::readToArray(){
         int _length;
 
     std::fstream infile;
-    infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
 
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
@@ -77,7 +77,11 @@ Array InputParser::readToArray(){
             cout<<"File could not open properly"<<endl;
         }
         arr.sortLinks();
+        arr.sortConnectedLinks();
         //  ~TEST~
+        std::cout<<endl;
+        arr.show(arr.pairs);
+        arr.show(arr.connectedPairs);
 
         arr.deleteLink(0,3);
         arr.deleteLink(0,0);
@@ -88,10 +92,10 @@ Array InputParser::readToArray(){
         arr.insertLink(12,0);
         arr.insertLink(0,0);
 
-        //arr.show();
+        arr.show(arr.pairs);
+        arr.show(arr.connectedPairs);
         //  ~TEST~
+
         arr.printer();
-        //links.show();
-        //cin.get();
         return arr;
 }
