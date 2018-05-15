@@ -29,7 +29,7 @@ void Array::insertLink(int page, int link){
     }else{
         if(!pairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(pairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(trimNode,1,trimNode.size()-1,link);
             if(posLink!=-1){
                 cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
 
@@ -53,7 +53,7 @@ void Array::deleteLink(int page, int link){
     }else{
        if(!pairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(pairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(trimNode,1,trimNode.size()-1,link);
             if(posLink!=-1){
                 pairs[page].erase(pairs[page].begin() + posLink + 1);
                 cout<<"deleted "<<link<<" from page "<<page<<endl;
@@ -110,11 +110,10 @@ void Array::makePair(int page, int link){
             pairs.at(page).push_back(link);
         }
     }
-    makeConnectedPair(link,page);
-
+    makeConnectedPairStart(page,link);
 }
 
-void Array::makeConnectedPair(int page, int link){ // see arguments are reversed when called
+void Array::makeConnectedPairStart(int page, int link){ // see arguments are reversed when called
 
     if(connectedPairs.size() <= page){ // then pairs doesnt include page
         do{
@@ -134,7 +133,39 @@ void Array::makeConnectedPair(int page, int link){ // see arguments are reversed
         }else{
             //TODO check if we need to have only 1 copy of an ID and not multiple, will raise complexity by n
             //where n are the links of page
-            connectedPairs.at(page).push_back(link);
+            int n = binarySearch(connectedPairs.at(page),1,connectedPairs.at(page).size()-1,link);
+            if(n == -1){
+                connectedPairs.at(page).push_back(link);
+            }
+        }
+    }
+    makeConnectedPairEnd(link,page);
+}
+
+void Array::makeConnectedPairEnd(int page, int link){ // see arguments are reversed when called
+
+    if(connectedPairs.size() <= page){ // then pairs doesnt include page
+        do{
+            reAllocConnectedVector();
+        }while(connectedPairs.size() <= page);
+        //and since we came here vector cell will be empty so no need to check more
+        std::vector<int> aPair;
+        aPair.push_back(page);
+        aPair.push_back(link);
+        connectedPairs[page] = aPair;
+    }else{
+        if(connectedPairs.at(page).size()==0){
+            std::vector<int> aPair;
+            aPair.push_back(page);
+            aPair.push_back(link);
+            connectedPairs[page] = aPair;
+        }else{
+            //TODO check if we need to have only 1 copy of an ID and not multiple, will raise complexity by n
+            //where n are the links of page
+            int n = binarySearch(connectedPairs.at(page),1,connectedPairs.at(page).size()-1,link);
+            if(n == -1){
+                connectedPairs.at(page).push_back(link);
+            }
         }
     }
 
@@ -146,7 +177,7 @@ void Array::deleteConnectedLink(int page, int link){
     }else{
        if(!connectedPairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(trimNode,1,trimNode.size()-1,link);
             if(posLink!=-1){
                 connectedPairs[page].erase(connectedPairs[page].begin() + posLink + 1);
                 cout<<"deleted "<<link<<" from page "<<page<<endl;
@@ -163,12 +194,12 @@ void Array::deleteConnectedLink(int page, int link){
 void Array::insertConnectedLink(int page, int link){
     if(connectedPairs.size()<=page){
         cout<<"page "<<page<<" was created"<<endl;
-        makeConnectedPair(page,link);
+        makeConnectedPairStart(page,link);
         cout<<"added link "<<link<<" in page "<<page<<endl;
     }else{
         if(!connectedPairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(trimNode,1,trimNode.size()-1,link);
             if(posLink!=-1){
                 cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
 
@@ -179,7 +210,7 @@ void Array::insertConnectedLink(int page, int link){
             }
         }else{
             cout<<"page "<<page<<" was created"<<endl;
-            makeConnectedPair(page,link);
+            makeConnectedPairStart(page,link);
             cout<<"added link "<<link<<" in page "<<page<<endl;
         }
     }

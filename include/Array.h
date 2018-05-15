@@ -28,7 +28,8 @@ class Array
     protected:
 
     private:
-        void makeConnectedPair(int linkPage, int link);
+        void makeConnectedPairStart(int linkPage, int link);
+        void makeConnectedPairEnd(int linkPage, int link);
         void deleteConnectedLink(int page, int link);
         void insertConnectedLink(int page, int link);
         void reAllocVector();
