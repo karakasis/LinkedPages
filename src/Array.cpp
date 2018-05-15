@@ -350,12 +350,8 @@ void Array::swapCells(int *xp, int *yp)
 //counter me arithmo ektelesis tis= arithmos S.S.
 int Array::DFS(){
     int counter=0;
-    color = new int[connectedPairs.size()];
-    for(int i =0;i<connectedPairs.size();i=i+1){
-        color[i]=1; //oloi oi komvoi white(arxikopoiisi)
-    }
     for(int j=0;j<connectedPairs.size();j=j+1){
-        if(color[j]==1){
+        if(color[j]==1 && connectedPairs[j].size()!=0){
             DFSvisit(j);
             counter=counter+1;
         }
@@ -368,8 +364,8 @@ void Array::DFSvisit(int u){
     color[u]=2;
     vector<int> neighbors = findNeighbors(connectedPairs[u]); //paizei na einai kenos kai na exei thema
     for(int k =0;k<neighbors.size();k=k+1){
-        if(color[k]==1){
-            DFSvisit(k);
+        if(color[neighbors[k]]==1){
+            DFSvisit(neighbors[k]);
         }
 
     }

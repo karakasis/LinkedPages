@@ -84,24 +84,24 @@ Array InputParser::readToArray(){
         arr.show(arr.connectedPairs);
 
 
-        //arr.findNumConnectedComponents();
+        arr.findNumConnectedComponents();
 
         arr.deleteLink(0,3);
         arr.deleteLink(0,0);
         arr.deleteLink(7,3);
 
-        //arr.findNumConnectedComponents();
+        arr.findNumConnectedComponents();
 
         arr.deleteLink(1,12);
         arr.deleteLink(0,1);
 
-        //arr.findNumConnectedComponents();
+        arr.findNumConnectedComponents();
 
         arr.insertLink(0,3);
         arr.insertLink(12,0);
         arr.insertLink(0,0);
 
-        //arr.findNumConnectedComponents();
+        arr.findNumConnectedComponents();
 
         arr.show(arr.pairs);
         arr.show(arr.connectedPairs);
