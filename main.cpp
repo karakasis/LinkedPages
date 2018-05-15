@@ -13,9 +13,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    //Controller(atoi(argv[1]));
-    InputParser parser;
-    parser.readToArray();
-    //cout<<argc<<" "<<argv[0]<<" "<<argv[1]<<endl;
+    Controller(atoi(argv[1]));
     return 0;
 }

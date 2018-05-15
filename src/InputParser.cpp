@@ -92,6 +92,6 @@ Array InputParser::readToArray(){
         //  ~TEST~
         arr.printer();
         //links.show();
-        cin.get();
+        //cin.get();
         return arr;
 }
