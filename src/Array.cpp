@@ -22,50 +22,52 @@ Array::~Array()
 //IO Functions
 
 void Array::insertLink(int page, int link){
+    cout<<"running: insertLink("<<page<<","<<link<<");"<<endl;
     if(pairs.size()<=page){
-        cout<<"page "<<page<<" was created"<<endl;
+        cout<<"page "<<page<<" was created"<<"[NORMAL]"<<endl;
         makePair(page,link);
-        cout<<"added link "<<link<<" in page "<<page<<endl;
+        cout<<"added link "<<link<<" in page "<<page<<"[NORMAL]"<<endl;
     }else{
         if(!pairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(pairs[page]);
             int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
             if(posLink!=-1){
-                cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
+                cout<<"link "<<link<<" in page "<<page<<" already exists"<<"[NORMAL]"<<endl;
 
             }else{
                 pairs[page].push_back(link);
                 bubbleSort(pairs[page],pairs[page].size());
-                cout<<"added link "<<link<<" in page "<<page<<endl;
+                cout<<"added link "<<link<<" in page "<<page<<"[NORMAL]"<<endl;
             }
         }else{
-            cout<<"page "<<page<<" was created"<<endl;
+            cout<<"page "<<page<<" was created"<<"[NORMAL]"<<endl;
             makePair(page,link);
-            cout<<"added link "<<link<<" in page "<<page<<endl;
+            cout<<"added link "<<link<<" in page "<<page<<"[NORMAL]"<<endl;
         }
     }
-    insertConnectedLink(link,page);
+    insertConnectedLinkStart(page,link);
 }
 
 void Array::deleteLink(int page, int link){
+    cout<<"running: deleteLink("<<page<<","<<link<<");"<<endl;
     if(pairs.size() <= page){
-        cout<<"page "<<page<<" not found"<<endl;
+        cout<<"page "<<page<<" not found"<<"[NORMAL]"<<endl;
     }else{
        if(!pairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(pairs[page]);
             int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
             if(posLink!=-1){
                 pairs[page].erase(pairs[page].begin() + posLink + 1);
-                cout<<"deleted "<<link<<" from page "<<page<<endl;
+                cout<<"deleted "<<link<<" from page "<<page<<"[NORMAL]"<<endl;
                 bubbleSort(pairs[page],pairs[page].size());
             }else{
-                cout<<"link "<<link<<" in page "<<page<<" not found"<<endl;
+                cout<<"link "<<link<<" in page "<<page<<" not found"<<"[NORMAL]"<<endl;
             }
         }else{
-            cout<<"page "<<page<<" not found"<<endl;
+            cout<<"page "<<page<<" not found"<<"[NORMAL]"<<endl;
         }
     }
-    deleteConnectedLink(link,page);
+    deleteConnectedLinkStart(page,link);
 
 }
 
@@ -76,6 +78,7 @@ std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
 }
 
 int Array::findNumConnectedComponents(){
+    cout<<"running: findNumConnectedComponents();"<<endl;
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete
     color = new int[connectedPairs.size()];
@@ -83,6 +86,7 @@ int Array::findNumConnectedComponents(){
         color[i]=1; //oloi oi komvoi white(arxikopoiisi)
     }
     int cc=DFS();
+    cout<<"returns"<<cc<<endl;
     return cc;
 }
 
@@ -173,49 +177,98 @@ void Array::makeConnectedPairEnd(int page, int link){ // see arguments are rever
 
 }
 
-void Array::deleteConnectedLink(int page, int link){
+void Array::deleteConnectedLinkStart(int page, int link){
     if(connectedPairs.size() <= page){
-        cout<<"page "<<page<<" not found"<<endl;
+        cout<<"page "<<page<<" not found"<<"[PAIRS-START]"<<endl;
     }else{
        if(!connectedPairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
             int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
             if(posLink!=-1){
                 connectedPairs[page].erase(connectedPairs[page].begin() + posLink + 1);
-                cout<<"deleted "<<link<<" from page "<<page<<endl;
+                cout<<"deleted "<<link<<" from page "<<page<<"[PAIRS-START]"<<endl;
                 bubbleSort(connectedPairs[page],connectedPairs[page].size());
             }else{
-                cout<<"link "<<link<<" in page "<<page<<" not found"<<endl;
+                cout<<"link "<<link<<" in page "<<page<<" not found"<<"[PAIRS-START]"<<endl;
             }
         }else{
-            cout<<"page "<<page<<" not found"<<endl;
+            cout<<"page "<<page<<" not found"<<"[PAIRS-START]"<<endl;
         }
     }
+    deleteConnectedLinkEnd(link,page);
 }
 
-void Array::insertConnectedLink(int page, int link){
+void Array::deleteConnectedLinkEnd(int page, int link){
+    if(connectedPairs.size() <= page){
+        cout<<"page "<<page<<" not found"<<"[PAIRS-END]"<<endl;
+    }else{
+       if(!connectedPairs.at(page).empty()){
+            std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
+            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            if(posLink!=-1){
+                connectedPairs[page].erase(connectedPairs[page].begin() + posLink + 1);
+                cout<<"deleted "<<link<<" from page "<<page<<"[PAIRS-END]"<<endl;
+                bubbleSort(connectedPairs[page],connectedPairs[page].size());
+            }else{
+                cout<<"link "<<link<<" in page "<<page<<" not found"<<"[PAIRS-END]"<<endl;
+            }
+        }else{
+            cout<<"page "<<page<<" not found"<<"[PAIRS-END]"<<endl;
+        }
+    }
+    cout<<endl;
+}
+
+void Array::insertConnectedLinkStart(int page, int link){
     if(connectedPairs.size()<=page){
-        cout<<"page "<<page<<" was created"<<endl;
+        cout<<"page "<<page<<" was created"<<"[PAIRS-START]"<<endl;
         makeConnectedPairStart(page,link);
-        cout<<"added link "<<link<<" in page "<<page<<endl;
+        cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-START]"<<endl;
     }else{
         if(!connectedPairs.at(page).empty()){
             std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
             int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
             if(posLink!=-1){
-                cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
+                cout<<"link "<<link<<" in page "<<page<<" already exists"<<"[PAIRS-START]"<<endl;
 
             }else{
                 connectedPairs[page].push_back(link);
                 bubbleSort(connectedPairs[page],connectedPairs[page].size());
-                cout<<"added link "<<link<<" in page "<<page<<endl;
+                cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-START]"<<endl;
             }
         }else{
             cout<<"page "<<page<<" was created"<<endl;
             makeConnectedPairStart(page,link);
-            cout<<"added link "<<link<<" in page "<<page<<endl;
+            cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-START]"<<endl;
         }
     }
+    insertConnectedLinkEnd(link,page);
+}
+
+void Array::insertConnectedLinkEnd(int page, int link){
+    if(connectedPairs.size()<=page){
+        cout<<"page "<<page<<" was created"<<"[PAIRS-END]"<<endl;
+        makeConnectedPairStart(page,link);
+        cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-END]"<<endl;
+    }else{
+        if(!connectedPairs.at(page).empty()){
+            std::vector<int> trimNode = findNeighbors(connectedPairs[page]);
+            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            if(posLink!=-1){
+                cout<<"link "<<link<<" in page "<<page<<" already exists"<<"[PAIRS-END]"<<endl;
+
+            }else{
+                connectedPairs[page].push_back(link);
+                bubbleSort(connectedPairs[page],connectedPairs[page].size());
+                cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-END]"<<endl;
+            }
+        }else{
+            cout<<"page "<<page<<" was created"<<"[PAIRS-END]"<<endl;
+            makeConnectedPairStart(page,link);
+            cout<<"added link "<<link<<" in page "<<page<<"[PAIRS-END]"<<endl;
+        }
+    }
+    cout<<endl;
 }
 
 void Array::sortLinks(){

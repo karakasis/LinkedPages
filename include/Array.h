@@ -30,8 +30,10 @@ class Array
     private:
         void makeConnectedPairStart(int linkPage, int link);
         void makeConnectedPairEnd(int linkPage, int link);
-        void deleteConnectedLink(int page, int link);
-        void insertConnectedLink(int page, int link);
+        void deleteConnectedLinkStart(int page, int link);
+        void insertConnectedLinkStart(int page, int link);
+        void deleteConnectedLinkEnd(int page, int link);
+        void insertConnectedLinkEnd(int page, int link);
         void reAllocVector();
         void reAllocConnectedVector();
 
