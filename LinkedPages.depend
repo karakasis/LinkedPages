@@ -49,7 +49,7 @@
 1526404551 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\array.h
 	<vector>
 
-1526406365 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
+1526407034 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
 	"InputParser.h"
 	"Array.h"
 	"ezRateProgressBar.hpp"
@@ -146,4 +146,9 @@
 	"ezRateProgressBar.hpp"
 	<fstream>
 	<iostream>
+
+1526574518 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\avl.cpp
+	"AVL.h"
+
+1526574843 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\avl.h
 
