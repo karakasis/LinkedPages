@@ -10,18 +10,17 @@ AVL::~AVL()
     //dtor
 }
 
-template <typename K, typename T>
-bool AVL::search(const K& k, T &e) const
+bool AVL::search(const int e) const
 {   // Search for element that matches k.
     // pointer p starts at the root and moves through
     // the tree looking for an element with key k
-    AVLTreeNode<T> *p = root;
+    AVLTreeNode *p = root;
     while (p){ // examine p->data
-        if (k < p -> data)
+        if (e < p -> data)
             p = p ->leftChild;
-        else if (k > p->data) p = p->RightChild;
+        else if (e > p->data) p = p->rightChild;
         else { // found element
-            e = p->data;
+            //e = p->data;
             return true;
         }
     }

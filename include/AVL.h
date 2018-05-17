@@ -11,29 +11,27 @@ class AVL
     protected:
 
     private:
-        template <class T>
         class AVLTreeNode {
 
             public:
                 AVLTreeNode(){
                     leftChild = rightChild = 0;
                 }
-                AVLTreeNode(const T& e){
-                    data = e; leftChild = rightChild = 0;
+                AVLTreeNode(const int d){
+                    data = d; leftChild = rightChild = 0;
                 }
-                AVLTreeNode(const T& e, AVLTreeNode *l, AVLTreeNode *r){
-                    data = e; leftChild = l; rightChild = r;
+                AVLTreeNode(const int d, AVLTreeNode *l, AVLTreeNode *r){
+                    data = d; leftChild = l; rightChild = r;
                 }
+                int data;
+                AVLTreeNode *leftChild; // left subtree
+                AVLTreeNode *rightChild; // right subtree
                 virtual ~AVLTreeNode();
             private:
-                T data;
-                AVLTreeNode<T> *leftChild; // left subtree
-                AVLTreeNode<T> *rightChild; // right subtree
 
         };
-        AVLTreeNode<T> *root;
-        template <typename K, typename T>
-        bool search(const K& k, T &e) const;
+        AVLTreeNode *root;
+        bool search(const int e) const;
 };
 
 #endif // AVL_H
