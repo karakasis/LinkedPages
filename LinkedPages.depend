@@ -26,16 +26,19 @@
 	<fstream>
 	"InputParser.h"
 
-1526151710 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\main.cpp
+1526394497 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\main.cpp
 	<iostream>
 	<fstream>
+	"Controller.h"
 	"InputParser.h"
 
-1526151710 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\inputparser.h
+1526261033 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\inputparser.h
 	<fstream>
 	<iostream>
+	"ezRateProgressBar.hpp"
+	"Array.h"
 
-1526244191 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\array.cpp
+1526407000 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\array.cpp
 	"Array.h"
 	"ezRateProgressBar.hpp"
 	<vector>
@@ -43,17 +46,17 @@
 	<fstream>
 	<sstream>
 
-1526244223 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\array.h
+1526404551 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\array.h
 	<vector>
 
-1526244914 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
+1526407034 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
 	"InputParser.h"
 	"Array.h"
 	"ezRateProgressBar.hpp"
 	<fstream>
 	<iostream>
 
-1526245488 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\ezrateprogressbar.hpp
+1526318520 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\ezrateprogressbar.hpp
 	<iostream>
 	<sstream>
 	<string>
@@ -74,4 +77,78 @@
 	<iomanip>
 	<windows.h>
 	<sys/time.h>
+
+1526315400 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\controller.cpp
+	"Controller.h"
+	"InputParser.h"
+	<fstream>
+	<iostream>
+	<sstream>
+	<string>
+	<map>
+
+1526313524 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\controller.h
+	"Array.h"
+	<sstream>
+	<map>
+
+1526318181 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\main.cpp
+	<iostream>
+	<fstream>
+	"Controller.h"
+	"InputParser.h"
+
+1526313524 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\include\controller.h
+	"Array.h"
+	<sstream>
+	<map>
+
+1526322251 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\include\array.h
+	<vector>
+
+1526321913 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\src\array.cpp
+	"Array.h"
+	"ezRateProgressBar.hpp"
+	<vector>
+	<iostream>
+	<fstream>
+	<sstream>
+
+1526318520 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\include\ezrateprogressbar.hpp
+	<iostream>
+	<sstream>
+	<string>
+	<stdio.h>
+	<string.h>
+	<assert.h>
+	<iomanip>
+	<windows.h>
+	<sys/time.h>
+
+1526315400 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\src\controller.cpp
+	"Controller.h"
+	"InputParser.h"
+	<fstream>
+	<iostream>
+	<sstream>
+	<string>
+	<map>
+
+1526261033 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\include\inputparser.h
+	<fstream>
+	<iostream>
+	"ezRateProgressBar.hpp"
+	"Array.h"
+
+1526321966 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages - copy\src\inputparser.cpp
+	"InputParser.h"
+	"Array.h"
+	"ezRateProgressBar.hpp"
+	<fstream>
+	<iostream>
+
+1526574518 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\avl.cpp
+	"AVL.h"
+
+1526574843 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\avl.h
 

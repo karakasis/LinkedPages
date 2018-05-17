@@ -18,22 +18,47 @@ InputParser::~InputParser()
     //dtor
 }
 
-void InputParser::read(){
+std::fstream InputParser::startLoader(){
+    int _length;
+
+    std::fstream infile;
+    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
+
+    infile.seekg(0,ios_base::end);
+    _length = infile.tellg();
+    _length = sizeof(char) * _length * 0.001;
+    infile.seekg(0, ios_base::beg);
+
+    ez::ezRateProgressBar<int> p(_length);
+    p.units = "KB";
+    p.start();
+
+    return infile;
+}
+
+
+Array InputParser::readToArray(){
 
         Array arr;
-        int _length, _last;
-        //arr = new Array();
-        //Array links;
-        std::fstream infile;
+        int _last;
 
-        infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-        infile.seekg(0,ios_base::end);
-        _length = infile.tellg();
-        infile.seekg(0, ios_base::beg);
+        //std::fstream infile = startLoader();
 
-        ez::ezRateProgressBar<int> p(_length);
-        p.units = "Char";
-        p.start();
+
+        int _length;
+
+    std::fstream infile;
+    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
+
+    infile.seekg(0,ios_base::end);
+    _length = infile.tellg();
+    _length = sizeof(char) * _length * 0.001;
+    infile.seekg(0, ios_base::beg);
+
+    ez::ezRateProgressBar<int> p(_length);
+    p.units = "KB";
+    p.start();
+
 
         if(infile.is_open()){
             //cout<<"File opened successfully"<<endl;
@@ -43,6 +68,7 @@ void InputParser::read(){
                 //arr.insertLink(d);
                 arr.makePair(c,d);
                 _last = infile.tellg();
+                _last = sizeof(char) * _last * 0.001;
                 p.update(_last);
             }
 
@@ -51,18 +77,36 @@ void InputParser::read(){
             cout<<"File could not open properly"<<endl;
         }
         arr.sortLinks();
+        arr.sortConnectedLinks();
         //  ~TEST~
+        std::cout<<endl;
+        arr.show(arr.pairs);
+        arr.show(arr.connectedPairs);
+
+
+        arr.findNumConnectedComponents();
+
         arr.deleteLink(0,3);
+        arr.deleteLink(0,0);
         arr.deleteLink(7,3);
+
+        arr.findNumConnectedComponents();
+
         arr.deleteLink(1,12);
+        arr.deleteLink(0,1);
+
+        arr.findNumConnectedComponents();
+
         arr.insertLink(0,3);
         arr.insertLink(12,0);
         arr.insertLink(0,0);
-        arr.show();
+
+        arr.findNumConnectedComponents();
+
+        arr.show(arr.pairs);
+        arr.show(arr.connectedPairs);
         //  ~TEST~
+
         arr.printer();
-        //links.show();
-
-
-
+        return arr;
 }

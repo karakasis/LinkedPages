@@ -158,7 +158,7 @@ public:
     endTime = osQueryPerfomance();
 
     // Abort if at least 1 second didn't elapse, unless newvalue will get us to 100%.
-    if ( ((endTime-prevTime)/1000000.0 < 1.0) && (newvalue < n) ) return;
+    if ( ((endTime-prevTime)/1000000.0 < 0.01) && (newvalue < n) ) return;
     prevTime = endTime;
     float dt = (endTime-startTime)/1000000.0;
     //if (dt < 1) return; // Was meant to avoid division by zero when time was in whole numbers.
@@ -215,14 +215,14 @@ public:
       secondsToString((unsigned int)eta, tstr);
       out.append(tstr);
       out.append(" | ");
-      toStr(cur, tstr);
+      commaNumber(cur, tstr);
       pad = procColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
       out.append(tstr); //proc
       out.append(" ");
       out.append(units);
       out.append(" | ");
-      toStr(n-cur, tstr);
+      commaNumber(n-cur, tstr);
       pad = unprocColWidth-tstr.size()-unitsWidth-1;
       if (pad > 0) out.append(pad,' ');
       out.append(tstr); //unproc
@@ -231,7 +231,7 @@ public:
       out.append(" | ");
       eta = cur/dt;
       if (eta > 1.0)
-        toStr((unsigned int)eta, tstr);
+        commaNumber((unsigned int)eta, tstr);
       else {
         std::ostringstream stm;
         stm << eta;
