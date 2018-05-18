@@ -112,9 +112,10 @@ Array InputParser::readToArray(){
         return arr;
 }
 
-AVL<AVL<page>> InputParser::readToAVL(){
+template <class T>
+AVL<AVL<node<T>>> InputParser::readToAVL(){
 
-        AVL<AVL<page>> avl;
+        AVL<AVL<node<T>>> avl;
         //AVL small;
         int _last;
 
@@ -135,16 +136,15 @@ AVL<AVL<page>> InputParser::readToAVL(){
     p.units = "KB";
     p.start();
 
-
         if(infile.is_open()){
             //cout<<"File opened successfully"<<endl;
 
             while(infile >> c >> d){
                 //arr.insertPage(c);
                 //arr.insertLink(d);
-                avl.insert_link(c);
-                avl.p
-                avl.root = avl.INSERT_LINK(avl.root,c,d);
+
+                avl.insert_link(c).insert_link(d);
+
                 //arr.makePair(c,d);
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
@@ -156,7 +156,10 @@ AVL<AVL<page>> InputParser::readToAVL(){
             cout<<"File could not open properly"<<endl;
         }
         std::ofstream out("test.txt", std::ofstream::out);
+        avl.get(10).delete_link(2);
+        avl.delete_link(10);
         avl.printTree(out);
+        avl.get(1).internal_inorder();
         out.close();
         //std::cout<<out.rdbuf();
         /*

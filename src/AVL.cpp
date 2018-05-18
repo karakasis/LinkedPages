@@ -10,113 +10,25 @@
 #include <math.h>
 
 using namespace std;
+
 template<class T>
-page* AVL<T>::DELETE_LINK(page* node,int x,int y)
+bool AVL<T>::delete_link(int page_id)
 {
-
-    page* temp;
-    link* InternalTemp;
-    temp = search(node,x); //search searches for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
-
-    if(temp == NULL)
-    {
-        return node;//does nothing because node does not exist.
-    }
-    else
-    {
-
-         InternalTemp = search(temp->Link,y); //searches for y in the internal tree.if found return address of node , else returns NULL.
-
-         if(InternalTemp == NULL)
-         {
-            return node;//does nothing because internal node(link) does not exist.
-         }
-         else
-         {
-            temp->Link = delete_link(temp->Link,y);
-            /* OR use above to also delete page
-            int NumberOfLinks = MBbinarytree_count_recursive(temp->Link);
-
-            if(NumberOfLinks == 1)//if number of links is 1 delete the link and the website that contained the link as well.
-            {
-              temp->Link = Delete(temp->Link,y);// if y exists in internal tree delete it,else do nothing.
-              node = DELETE_TREE(node,x);// delete x as well.
-              return node;
-            }*/
-         }
-    }
+    bool deleted = false;
+    //node* temp = search(root,page_id); //search searches for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
+    node<T>* temp = delete_link(root,page_id); //search searches for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
+    if(temp!=NULL) deleted = true;
+    temp == NULL;
+    return deleted;
 }
 
-/*
- * Insert Element into the tree
- */
-template <class T>
-void AVL<T>::insert_link(int page_id,int link_id)//Search F() for a value is not used.Just Insert is called and if the value already exists it does nothing.
-{
-    if (node == NULL)
-    {
-        node = new page;//Elements tree
-        node->data = value;//   *|*
-        node->left = NULL;//   **|**
-        node->right = NULL;// ***|***
-        node->Link = NULL;//Pointer to INTERNAL AVL tree with LINKS
-
-
-        node->Link = AVL<link>::insert_link(node->Link,LinkID);//Insert Link to Internal tree.If already exists it does nothing.
-
-
-        return node;
-    }
-    else if (value < node->data)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL;.
-    {
-        node->left = INSERT_LINK(node->left, value,LinkID);
-        node = balance (node);
-    }
-    else if (value > node->data)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL;.
-     {
-       node->right = INSERT_LINK(node->right, value,LinkID);
-       node = balance (node);
-     }
-    else if (value == node->data)//if the value already exists in the tree, Gain access to its INTERNAL TREE and insert the LinkID.If LinkID already exists it does NOTHING.
-    {
-       node->Link = insert_link(node->Link,LinkID);
-    }
-    return node;
-}
 
 /*
-*Insert Link into the INTERNAL tree
-*/
-template <class T>
-T* AVL<T>::insert_link(T* node,int LinkID)
-{
-    if(node == NULL)
-    {
-        node = new link;//Declaration of New Internal Tree.
-        node->data = LinkID;
-        node->left = NULL;
-        node->right= NULL;
-        return node;
-    }
-    else if(LinkID < node->data)
-    {
-        node->left = insert_link(node->left,LinkID);
-        node = balance(node);
-    }
-    else if(LinkID > node->data)
-    {
-        node->right = insert_link(node->right,LinkID);
-        node = balance(node);
-    }
-    return node;
-}
-
-/*
-* Internal Tree Deletion.
+* Delete link recursion
 */
 
-template <>
-link* AVL<link>::delete_link(link* node, int key)//Deletion for internal avl type of struct.
+template <class T>
+node<T>* AVL<T>::delete_link(node<T>* node, int key)//Deletion for internal avl type of struct.
 {
     // STEP 1: PERFORM STANDARD BST DELETE
 
@@ -125,12 +37,12 @@ link* AVL<link>::delete_link(link* node, int key)//Deletion for internal avl typ
 
     // If the key to be deleted is smaller than the node's key,
     // then it lies in left subtree
-    if ( key < node->data )
+    if ( key < node->page_id )
         node->left = delete_link(node->left, key);
 
     // If the key to be deleted is greater than the node's key,
     // then it lies in right subtree
-    else if( key > node->data )
+    else if( key > node->page_id )
         node->right = delete_link(node->right, key);
 
     // if key is same as node's key, then This is the node
@@ -140,7 +52,12 @@ link* AVL<link>::delete_link(link* node, int key)//Deletion for internal avl typ
         // node with only one child or no child
         if( (node->left == NULL) || (node->right == NULL) )
         {
-            link *temp = node->left ? node->left : node->right;//temp is whatever is not NULL.
+             T* temp ;
+             if(node->left != NULL){
+                temp = node->left;
+             }else{
+                 temp = node->right;//temp is whatever is not NULL.
+             }
 
             // No child case
             if(temp == NULL)
@@ -151,21 +68,19 @@ link* AVL<link>::delete_link(link* node, int key)//Deletion for internal avl typ
             else // One child case
              *node = *temp; // Copy the contents of the non-empty child
 
-            delete temp;
-
-
+            //delete temp;
         }
         else
         {
             // node with two children: Get the inorder successor (smallest
             // in the right subtree)
-            link* temp = minValue(node->right);
+            T* temp = minValue(node->right);
 
             // Copy the inorder successor's data to this node
-            node->data = temp->data;
+            node->page_id = temp->page_id;
 
             // Copy the inorder successor's Link address to this node.
-            //node->Link = temp->Link; //***watch
+            node->self = temp->self; //***watch
 
             // Delete the inorder successor
             node->right = delete_link(node->right, temp->data);
@@ -186,11 +101,76 @@ link* AVL<link>::delete_link(link* node, int key)//Deletion for internal avl typ
 
 }
 
+
+template<class T>
+T* AVL<T>::get(int page_id)
+{
+    return search(root,page_id);
+}
+
+/*
+ * Insert Element into the tree
+ */
+template <class T>
+T* AVL<T>::insert_link(int page_id)//Search F() for a value is not used.Just Insert is called and if the value already exists it does nothing.
+{
+    if (root == NULL)
+    {
+        //root = new node;//Elements tree
+        root->page_id = page_id;//   *|*
+        root->left = NULL;//   **|**
+        root->right = NULL;// ***|***
+        root->self = NULL;//Pointer to INTERNAL AVL tree with LINKS
+        //node->Link = AVL<link>::insert_link(node->Link,LinkID);//Insert Link to Internal tree.If already exists it does nothing.
+    }
+    else if (page_id < root->page_id)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL;.
+    {
+        root->left.self = insert_link(root->left, page_id);
+        root = balance (root);
+        return root -> left.self;
+    }
+    else if (page_id > root->page_id)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL;.
+    {
+       root->right.self = insert_link(root->right, page_id);
+       root = balance (root);
+       return root -> right.self;
+    }
+    return root -> self;
+}
+
+/*
+*Insert Link recursion
+*/
+template <class T>
+T* AVL<T>::insert_link(node<T>* node,int page_id)
+{
+    if(node == NULL)
+    {
+        //node = new node;//Declaration of New Internal Tree.
+        node->page_id = page_id;
+        node->left = NULL;
+        node->right= NULL;
+        node->self = NULL;
+        //return node->self;
+    }
+    else if(page_id < node->page_id)
+    {
+        node->left = insert_link(node->left,page_id);
+        node = balance(node);
+    }
+    else if(page_id > node->page_id)
+    {
+        node->right = insert_link(node->right,page_id);
+        node = balance(node);
+    }
+    return node->self;
+}
+
 /*
 *Counting The nodes of tree  (FOR AVL_NODE ).
 */
 template <class T>
-int AVL<T>::MBbinarytree_count_recursive(T *node)
+int AVL<T>::MBbinarytree_count_recursive(node<T> *node)
 {
     int count = 0;
     if (node != NULL)
@@ -204,9 +184,9 @@ int AVL<T>::MBbinarytree_count_recursive(T *node)
 *returns Minimum Node address of an AVL tree(avl_node*).
 */
 template <class T>
-T* AVL<T>::minValue(T* node)
+node<T>* AVL<T>::minValue(node<T>* noded)
 {
-    T* Current = node;
+    node<T>* Current = noded;
     while(Current->left != NULL)
     {
         Current = Current->left;
@@ -215,25 +195,17 @@ T* AVL<T>::minValue(T* node)
 }
 
 template <class T>
-T* AVL<T>::search(T* node,int data)//searches for the Node in the Tree via its data.
+node<T>* AVL<T>::search(node<T>* node,int page_id)//searches for the Node in the Tree via its data.
 {                               //Returns the address(avl_node*).
-    if(node == NULL)//if not found.
+    if(page_id > node->page_id)
     {
-        return node;
+        return search(node->right,page_id);
     }
-    if(data == node->data)
+    else if(page_id < node->page_id)
     {
-        return node;
+        return search(node->left,page_id);
     }
-    else if(data > node->data)
-    {
-        return search(node->right,data);
-    }
-    else if(data < node->data)
-    {
-        return search(node->left,data);
-    }
-     return NULL;
+    return node;
 
 }
 
@@ -241,7 +213,7 @@ T* AVL<T>::search(T* node,int data)//searches for the Node in the Tree via its d
 *Returns true if AVL tree with node as node is height-balanced
 */
 template <class T>
-bool AVL<T>::isBalanced(T* node)
+bool AVL<T>::isBalanced(node<T>* node)
 {
    int lh; /* for height of left subtree */
    int rh; /* for height of right subtree */
@@ -265,7 +237,7 @@ bool AVL<T>::isBalanced(T* node)
  * Height of AVL Tree
  */
 template <class T>
-int AVL<T>::height(T *temp)
+int AVL<T>::height(node<T> *temp)
 {
     int h = 0;
     if (temp != NULL)
@@ -282,7 +254,7 @@ int AVL<T>::height(T *temp)
  * Height Difference
  */
 template <class T>
-int AVL<T>::diff(T *temp)
+int AVL<T>::diff(node<T> *temp)
 {
     int l_height = height (temp->left);
     int r_height = height (temp->right);
@@ -294,9 +266,9 @@ int AVL<T>::diff(T *temp)
  * Right Rotation
  */
 template <class T>
-T *AVL<T>::r_rotation(T *parent)
+node<T>* AVL<T>::r_rotation(node<T> *parent)
 {
-    T *temp;
+    node<T> *temp;
     temp = parent->right;
     parent->right = temp->left;
     temp->left = parent;
@@ -306,9 +278,9 @@ T *AVL<T>::r_rotation(T *parent)
  * Left Rotation
  */
 template <class T>
-T *AVL<T>::l_rotation(T *parent)
+node<T> *AVL<T>::l_rotation(node<T> *parent)
 {
-    T *temp;
+    node<T> *temp;
     temp = parent->left;
     parent->left = temp->right;
     temp->right = parent;
@@ -318,9 +290,9 @@ T *AVL<T>::l_rotation(T *parent)
  * Left - Right Rotation
  */
 template <class T>
-T *AVL<T>::lr_rotation(T *parent)
+node<T> *AVL<T>::lr_rotation(node<T> *parent)
 {
-    T *temp;
+    node<T> *temp;
     temp = parent->left;
     parent->left = r_rotation (temp);
     return l_rotation (parent);
@@ -329,9 +301,9 @@ T *AVL<T>::lr_rotation(T *parent)
  * Right- Left Rotation
  */
 template <class T>
-T *AVL<T>::rl_rotation(T *parent)
+node<T> *AVL<T>::rl_rotation(node<T> *parent)
 {
-    T *temp;
+    node<T> *temp;
     temp = parent->right;
     parent->right = l_rotation (temp);
     return r_rotation (parent);
@@ -340,7 +312,7 @@ T *AVL<T>::rl_rotation(T *parent)
  * Balancing AVL Tree
  */
 template <class T>
-T *AVL<T>::balance(T *temp)
+node<T> *AVL<T>::balance(node<T> *temp)
 {
     if(temp == NULL)
     {
@@ -368,12 +340,12 @@ T *AVL<T>::balance(T *temp)
 *Inorder Traversal of Internal AVL tree
 */
 template <class T>
-void AVL<T>::internal_inorder(ofstream& output,link* node)
+void AVL<T>::internal_inorder(ofstream& output,node<T>* node)
 {
    if(node != NULL)
    {
      internal_inorder(output,node->left);
-     output<<node->data<<",";
+     output<<node->page_id<<",";
      internal_inorder(output,node->right);
    }
    return;
@@ -382,6 +354,7 @@ void AVL<T>::internal_inorder(ofstream& output,link* node)
 /*
  * Inorder Traversal of AVL Tree //
  */
+ /*
 template <class T>
 void AVL<T>::inorder(ofstream& output,page *node )
 {
@@ -396,9 +369,9 @@ void AVL<T>::inorder(ofstream& output,page *node )
     }
 
 }
-
+*/
 template <class T>
 void AVL<T>::printTree(ofstream& output){
-    inorder(output,root);
+    internal_inorder(output,root);
     std::cout<<output.rdbuf();
 }

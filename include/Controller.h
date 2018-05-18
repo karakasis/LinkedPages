@@ -6,6 +6,7 @@
 #include <sstream>
 #include <map>
 
+template <class T>
 class Controller
 {
     public:
@@ -25,7 +26,7 @@ class Controller
         //enum class Commands;
         //std::map<std::string, Commands> s_mapStringToCommands;
         Array arr;
-        AVL<page> avl;
+        AVL<AVL<node<T>>> avl;
         std::vector<std::string> split(const char *str, std::vector<int> &ints, std::vector<std::string> &strings);
 };
 

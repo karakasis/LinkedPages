@@ -12,14 +12,6 @@
 
 using namespace std;
 
-template <class T>
-struct page
-{
-    int page_id;
-    T *left;
-    T *right;
-};
-
 /*
  * Class Declaration
  */
@@ -27,10 +19,19 @@ template <class T>
 class AVL
 {
     public:
+        struct node
+        {
+            int page_id;
+            node *left;
+            node *right;
+            T *self;
+        };
+
         //struct page;
-        void insert_link(int page_id);
-        void delete_link(int page_id);
-        T* root;
+        T* insert_link(int page_id);
+        bool delete_link(int page_id);
+        T* get(int page_id);
+        node* root;
 
         AVL()
         {
@@ -45,22 +46,22 @@ class AVL
 
     private:
         //Internal_AVL functions////
-        T* insert_link(T* root,int LinkID);
-        T* delete_link(T *,int );
-        T* balance(T * );
-        int diff(T *);
-        int height(T *);
-        T *r_rotation(T *);
-        T *l_rotation(T *);
-        T *lr_rotation(T *);
-        T *rl_rotation(T *);
+        T* insert_link(node<T>* ,int );
+        node<T>* delete_link(node<T>* ,int );
+        node<T>* balance(node<T> * );
+        int diff(node<T> *);
+        int height(node<T> *);
+        node<T> *r_rotation(node<T> *);
+        node<T> *l_rotation(node<T> *);
+        node<T> *lr_rotation(node<T> *);
+        node<T> *rl_rotation(node<T> *);
 
-        T* minValue(T *);
-        bool isBalanced(T* root);
-        int MBbinarytree_count_recursive(T *);
-        void inorder(ofstream& output,page *);
-        void internal_inorder(ofstream& output,link *);
-        T* search(T*,int );
+        node<T>* minValue(node<T> *);
+        bool isBalanced(node<T>* root);
+        int MBbinarytree_count_recursive(node<T> *);
+        //void inorder(ofstream& output,node *);
+        void internal_inorder(ofstream& output,node<T> *);
+        node<T>* search(node<T>*,int );
 
 };
 
