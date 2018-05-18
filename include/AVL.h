@@ -31,6 +31,7 @@ class AVL
         void insert_link(int page_id);
         void delete_link(int page_id);
         T* root;
+
         AVL()
         {
             root = NULL;
