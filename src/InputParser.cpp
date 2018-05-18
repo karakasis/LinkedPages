@@ -81,9 +81,9 @@ Array InputParser::readToArray(){
         arr.sortConnectedLinks();
         //  ~TEST~
         std::cout<<endl;
-        //arr.show(arr.pairs);
+        arr.show(arr.pairs);
         //arr.show(arr.connectedPairs);
-        std::cout<<arr.pairs.size()<<" "<<arr.connectedPairs.size()<<endl;
+        //std::cout<<arr.pairs.size()<<" "<<arr.connectedPairs.size()<<endl;
     /*
         arr.findNumConnectedComponents();
 
@@ -112,10 +112,10 @@ Array InputParser::readToArray(){
         return arr;
 }
 
-template <class T>
-AVL<AVL<node<T>>> InputParser::readToAVL(){
+void InputParser::readToAVL(){
 
-        AVL<AVL<node<T>>> avl;
+        AVL<AVL<int>> avl;
+        AVL<int> *inner_avl;
         //AVL small;
         int _last;
 
@@ -125,7 +125,7 @@ AVL<AVL<node<T>>> InputParser::readToAVL(){
         int _length;
 
     std::fstream infile;
-    infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
 
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
@@ -142,8 +142,11 @@ AVL<AVL<node<T>>> InputParser::readToAVL(){
             while(infile >> c >> d){
                 //arr.insertPage(c);
                 //arr.insertLink(d);
-
-                avl.insert_link(c).insert_link(d);
+                //avl.get(c);
+                if(c == 3)
+                    true;
+                inner_avl = avl.insert_link(c)->self;
+                inner_avl->insert_link(d);
 
                 //arr.makePair(c,d);
                 _last = infile.tellg();
@@ -156,12 +159,24 @@ AVL<AVL<node<T>>> InputParser::readToAVL(){
             cout<<"File could not open properly"<<endl;
         }
         std::ofstream out("test.txt", std::ofstream::out);
-        avl.get(10).delete_link(2);
-        avl.delete_link(10);
-        avl.printTree(out);
-        avl.get(1).internal_inorder();
+        //avl.get(10)->self->delete_link(2);
+        //avl.delete_link(10);
+        //avl.printTree(out);
+        for(int i=0; i<10; i++){
+            inner_avl = avl.get(i)->self;
+            if(inner_avl!=NULL){
+                out<<i<<" : ";
+                inner_avl -> printTree(out);
+            }
+        }
+        //inner_avl = avl.get(3)->self;
+        //avl.printTree(out);
+        //inner_avl ->printTree(out);
         out.close();
         //std::cout<<out.rdbuf();
+
+
+
         /*
         arr.sortLinks();
         arr.sortConnectedLinks();
@@ -196,5 +211,4 @@ AVL<AVL<node<T>>> InputParser::readToAVL(){
 
         arr.printer();
         */
-        return avl;
 }

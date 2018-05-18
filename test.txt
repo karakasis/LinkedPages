@@ -1,6 +1,6 @@
-0,number of links: 3,links:1,2,3,
-1,number of links: 5,links:0,7,17,18,19,
-3,number of links: 2,links:42,43,
-4,number of links: 3,links:0,11,14,
-5,number of links: 3,links:86,87,88,
-6,number of links: 2,links:0,14,
+0 : 
+1 : 0 1 2 3 7 17 18 19 42 43 
+3 : 
+4 : 0 11 14 
+5 : 
+6 : 0 14 86 87 88 

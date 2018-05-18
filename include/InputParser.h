@@ -18,8 +18,7 @@ class InputParser
         InputParser();
         virtual ~InputParser();
         Array readToArray();
-        template <class T>
-        AVL<AVL<node<T>>> readToAVL();
+        void readToAVL();
 
     protected:
 
