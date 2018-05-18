@@ -8,11 +8,6 @@
 #include <sstream>
 
 using namespace std;
-Array::Array()
-{
-    reAllocVector();
-    reAllocConnectedVector();
-}
 
 Array::~Array()
 {
@@ -286,14 +281,14 @@ void Array::sortConnectedLinks(){
 
 void Array::reAllocVector(){
     const int x =pairs.size();
-    for(int i = x; i< x+300; i++){
+    for(int i = x; i< x+allocationStep; i++){
         pairs.insert(pairs.begin() +i,std::vector<int>(0));
     }
 }
 
 void Array::reAllocConnectedVector(){
     const int x = connectedPairs.size();
-    for(int i = x; i< x+300; i++){
+    for(int i = x; i< x+allocationStep; i++){
         connectedPairs.insert(connectedPairs.begin() +i,std::vector<int>(0));
     }
 }

@@ -8,8 +8,14 @@
 class Array
 {
     public:
-        Array();
+        Array(){};
+        Array(int mem){
+            allocationStep = mem;
+            reAllocVector();
+            reAllocConnectedVector();
+            };
         virtual ~Array();
+        int allocationStep;
         void deleteLink(int page, int link);
         void insertLink(int page, int link);
         std::vector<int> findNeighbors(std::vector<int> linkedPages);

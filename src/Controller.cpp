@@ -8,13 +8,6 @@
 
 using namespace std;
 
-Controller::Controller(int arg)
-{
-    //ctor
-    argSwitch = arg;
-    readCommands();
-}
-
 Controller::~Controller()
 {
     //dtor
@@ -86,7 +79,8 @@ void Controller::readCommands(){
 
 void Controller::executeCommand(const char *cmd_ss){
     InputParser parser;
-    arr = parser.readToArray();
+    //arr = parser.readToArray();
+    avl = parser.readToAVL();
     /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings

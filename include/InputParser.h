@@ -8,8 +8,7 @@
 
 #include "ezRateProgressBar.hpp"
 #include "Array.h"
-
-
+#include "AVL.h"
 
 
 class InputParser
@@ -19,6 +18,7 @@ class InputParser
         InputParser();
         virtual ~InputParser();
         Array readToArray();
+        AVL<page> readToAVL();
 
     protected:
 

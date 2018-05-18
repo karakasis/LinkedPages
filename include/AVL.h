@@ -1,37 +1,66 @@
 #ifndef AVL_H
 #define AVL_H
 
+#include <string.h>
+#include <fstream>
+#include <cstdlib>
+#include <conio.h>
+#include<cstdio>
+#include<sstream>
+#include<math.h>
+#include<iostream>
 
+using namespace std;
+
+template <class T>
+struct page
+{
+    int page_id;
+    T *left;
+    T *right;
+};
+
+/*
+ * Class Declaration
+ */
+template <class T>
 class AVL
 {
     public:
-        AVL();
-        virtual ~AVL();
+        //struct page;
+        void insert_link(int page_id);
+        void delete_link(int page_id);
+        T* root;
+        AVL()
+        {
+            root = NULL;
+        }
+        void printTree(ofstream& output);
 
-    protected:
+        //======
+        /*
+        *MAIN FUNCTIONS
+        */
 
     private:
-        class AVLTreeNode {
+        //Internal_AVL functions////
+        T* insert_link(T* root,int LinkID);
+        T* delete_link(T *,int );
+        T* balance(T * );
+        int diff(T *);
+        int height(T *);
+        T *r_rotation(T *);
+        T *l_rotation(T *);
+        T *lr_rotation(T *);
+        T *rl_rotation(T *);
 
-            public:
-                AVLTreeNode(){
-                    leftChild = rightChild = 0;
-                }
-                AVLTreeNode(const int d){
-                    data = d; leftChild = rightChild = 0;
-                }
-                AVLTreeNode(const int d, AVLTreeNode *l, AVLTreeNode *r){
-                    data = d; leftChild = l; rightChild = r;
-                }
-                int data;
-                AVLTreeNode *leftChild; // left subtree
-                AVLTreeNode *rightChild; // right subtree
-                virtual ~AVLTreeNode();
-            private:
+        T* minValue(T *);
+        bool isBalanced(T* root);
+        int MBbinarytree_count_recursive(T *);
+        void inorder(ofstream& output,page *);
+        void internal_inorder(ofstream& output,link *);
+        T* search(T*,int );
 
-        };
-        AVLTreeNode *root;
-        bool search(const int e) const;
 };
 
-#endif // AVL_H
+#endif // INVERTEDINDEX_H
