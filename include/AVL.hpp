@@ -61,7 +61,7 @@ class AVL
                         //in case of AVL<T> self would store the T object f.e an inner AVL.
             var<T> unique_id; // defines the comparable variable of an AVL.
             unsigned char height;
-
+            //basic insertion make_unique
             node(const var<T> id, unsigned char h = 1)
                 : self{},
                   left{std::move(nullptr)},
@@ -71,6 +71,17 @@ class AVL
                       //unique_id = id;
                       //height = h;
                   }
+
+            //clone make_unique
+            node(const var<T> id,
+             T&& _self,
+             Node&& _left,
+             Node&& _right,
+             unsigned char h)
+                : left{std::move(_left)},
+                  right{std::move(_right)},
+                  self{std::forward<T>(T(_self))}, // notice that T has to support cloning for AVL to retain T for itself
+                  height{h}, unique_id{id} {}
 
         };
 
@@ -84,12 +95,42 @@ class AVL
 
     public:
 
-        AVL() : root(nullptr),lockBalance(false),dummy{-1} { size = 0; }
+        ~AVL() noexcept = default;
 
-        AVL(int size_dum) : root(nullptr),lockBalance(false),dummy{-1} { size = size_dum; }
+        AVL()
+        : root(nullptr),lockBalance(false),dummy{-1}
+            { size = 0; }
 
-        //template<typename X = T>
-        T& add(var<T> data)//Search F() for a value is not used.Just Insert is called and if the value already exists it does nothing.
+        AVL(int size_dum)
+        : root(nullptr),lockBalance(false),dummy{-1}
+            { size = size_dum; }
+
+        //-> ref to: https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom/3279550#3279550 : for copy-swap idiom
+        //copy constructor
+        AVL(const AVL& other)
+        : root{clone(other.root)}, size{other.size}, lockBalance(false), dummy{-1}
+            { }
+
+        //move constructor c++11
+         AVL(AVL&& other) noexcept
+        : AVL() // initialize via default constructor, C++11 only
+            { swap(*this,other); }
+
+        AVL& operator=(AVL operand)
+        {
+            swap(*this,operand);
+            return *this;
+        }
+
+        friend void swap(AVL& src, AVL& oper) // nothrow
+        {
+            using std::swap;
+
+            swap(src.root, oper.root);
+            swap(src.size, oper.size);
+        }
+
+        T& add(var<T> data)
         {
             //size++ will happen inside inner function
             lockBalance = false;
@@ -99,17 +140,11 @@ class AVL
 
         void remove(var<T> unique_id)
         {
-            //bool deleted = false;
-            //node* temp = find(root,unique_id); //find findes for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
-            //node* temp =
             data_found = true;
-            delete_inner(root,unique_id); //find findes for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
+            delete_inner(root,unique_id);
             if(data_found){
                 size--;
             }
-            //if(temp!=NULL) deleted = true;
-            //temp == NULL;
-            //return deleted;
         }
 
         T& get(var<T> key)
@@ -119,7 +154,11 @@ class AVL
             return data_found  ? saved->self : dummy;
         }
 
+        Node& getRoot(){
+            return this -> root;
+        }
 
+        //PRINTER functions////
         void print(ofstream& output){
             if (size == 0) output<< "{ }";
             else if(size == -1) return;
@@ -127,7 +166,6 @@ class AVL
                 output<< "{ ";
                 internal_inorder(output,root);
                 output<<"}"<<std::endl;
-                //std::cout<<output.rdbuf();
             }
 
         }
@@ -141,10 +179,6 @@ class AVL
                 internal_inorder_cmd(root);
                 std::cout << "\b\b}\n";
             }
-        }
-
-        Node& getRoot(){
-            return this -> root;
         }
 
         /* Function to print level order traversal a tree*/
@@ -276,7 +310,8 @@ class AVL
                 internal_inorder_cmd(_node->right);
             }
         }
-        //not working i think
+        //not working i think and if it does its against implementations logic
+        //the user must stand responsible for his iterations on combined trees.
         void print_inner(const Node& _node) const noexcept
         {
             if (_node != nullptr) {
@@ -325,7 +360,23 @@ class AVL
                 else return(rheight+1);
             }
         }
-        //Internal_AVL functions////
+
+
+        //Cloning////
+        Node clone(const Node& _node) const
+        {
+            if (_node == nullptr) return nullptr;
+            else
+                return std::make_unique<node>(
+                          std::forward<var<T>>(_node->unique_id),
+                          std::forward<T>(_node->self),
+                          clone(_node->left),
+                          clone(_node->right),
+                          _node->height
+                          );
+        }
+
+        //AVL private functions////
         /*
         * Delete link recursion
         */
@@ -458,10 +509,9 @@ class AVL
                     rotateleft(_node->left);
                 rotateright(_node);
             }
-            //return _node; // no balance needed
         }
 
-        void rotateright(Node& _node) // the right rotation round p
+        void rotateright(Node& _node)
         {
             auto temp = std::move(_node -> left);
             _node -> left = std::move(temp -> right);
@@ -473,7 +523,7 @@ class AVL
             _node = std::move(temp);
         }
 
-        void rotateleft(Node& _node) // the left rotation round q
+        void rotateleft(Node& _node)
         {
             auto temp = std::move(_node->right);
             _node->right = std::move(temp->left);
@@ -486,8 +536,8 @@ class AVL
         }
 
 
-        void find(Node& _node,var<T> key)//findes for the Node in the Tree via its data.
-        {                               //Returns the address(avl_node*).
+        void find(Node& _node,var<T> key)
+        {
             if(_node == nullptr) return;
             else if(key == _node -> unique_id){
                 data_found = true;

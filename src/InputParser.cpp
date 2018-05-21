@@ -24,9 +24,9 @@ void InputParser::startLoader(std::fstream& infile){
 
     //std::fstream infile;
     //infile.open("input.txt",std::fstream::in|std::fstream::ate);
-    //infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-    infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_v_small.txt",std::fstream::in|std::fstream::ate);
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
@@ -99,11 +99,9 @@ Array InputParser::readToArray(){
         arr.printer();
         return arr;
 }
-
 AVL<AVL<int>> InputParser::readToAVL(){
 
         AVL<AVL<int>> avl;
-        AVL<int> *inner_avl;
         //AVL small;
         int _last;
 
@@ -117,6 +115,7 @@ AVL<AVL<int>> InputParser::readToAVL(){
             while(infile >> c >> d){
 
                 avl.add(c).add(d);
+                avl.add(d).add(c);
 
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
@@ -130,7 +129,13 @@ AVL<AVL<int>> InputParser::readToAVL(){
         cout<<endl;
         cout<<endl;
         cout<<endl;
-
+        std::ofstream out("test.txt", std::ofstream::out);
+        avl.printLevelOrder(out,1,1,3);
+        for(int i =0; i<10; i++){
+            avl.get(i).print(out);
+        }
+        out.close();
+/*
         std::ofstream out("test.txt", std::ofstream::out);
         avl.printLevelOrder(out,1,1,3);
         avl.get(20).printLevelOrder(out,1,1,3);
@@ -171,41 +176,6 @@ AVL<AVL<int>> InputParser::readToAVL(){
 
         out.close();
 
-
+*/
         return avl;
-
-        /*
-        arr.sortLinks();
-        arr.sortConnectedLinks();
-        //  ~TEST~
-        std::cout<<endl;
-        arr.show(arr.pairs);
-        arr.show(arr.connectedPairs);
-
-
-        arr.findNumConnectedComponents();
-
-        arr.deleteLink(0,3);
-        arr.deleteLink(0,0);
-        arr.deleteLink(7,3);
-
-        arr.findNumConnectedComponents();
-
-        arr.deleteLink(1,12);
-        arr.deleteLink(0,1);
-
-        arr.findNumConnectedComponents();
-
-        arr.insertLink(0,3);
-        arr.insertLink(12,0);
-        arr.insertLink(0,0);
-
-        arr.findNumConnectedComponents();
-
-        arr.show(arr.pairs);
-        arr.show(arr.connectedPairs);
-        //  ~TEST~
-
-        arr.printer();
-        */
 }

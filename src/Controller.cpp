@@ -81,7 +81,22 @@ void Controller::executeCommand(const char *cmd_ss){
     InputParser parser;
     //arr = parser.readToArray();
     avl = parser.readToAVL();
-    //AVL<int> *inner = avl.get(0)->self;
+    cout<<".."<<endl;
+    cout<<"Cloning AVL.."<<endl;
+    AVL<AVL<int>> clone(avl);
+    cout<<"Outer AVL n"<<endl;
+    //avl.print_cmd();
+    cout<<"Inner AVL n"<<endl;
+    //avl.get(0).remove(2);
+
+    //avl.get(0).get(1).print_cmd();
+    //avl.get(0).get(1).print_cmd();
+    cout<<"Outer AVL clone"<<endl;
+    //clone.remove(1);
+    //clone.print_cmd();
+    cout<<"Inner AVL clone"<<endl;
+    //clone.get(0).remove(5);
+    //clone.get(0).print_cmd();
     /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings
