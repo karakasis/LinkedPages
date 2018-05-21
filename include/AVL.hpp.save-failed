@@ -1,0 +1,364 @@
+#ifndef AVL_H
+#define AVL_H
+
+#include <string.h>
+#include <fstream>
+#include <cstdlib>
+#include <conio.h>
+#include<cstdio>
+#include<sstream>
+#include<math.h>
+#include<iostream>
+#include <memory>
+#include <tuple>
+#include <type_traits>
+
+using namespace std;
+
+/*
+ * Class Declaration
+ */
+ //https://stackoverflow.com/questions/25187323/how-can-i-get-the-innermost-template-parameter-type?rq=1
+template <class K>
+struct innermost_impl
+{
+    using type = K;
+};
+
+template<template<typename> class E, typename K>
+struct innermost_impl<E<K>>
+{
+    using type = typename innermost_impl<K>::type;
+};
+
+template<template<typename...> class E, typename... Ks>
+struct innermost_impl<E<Ks...>>
+{
+    using type = std::tuple<typename innermost_impl<Ks>::type...>;
+};
+
+template<typename K>
+using var = typename innermost_impl<K>::type;
+
+template<class>
+struct X;
+
+static_assert(std::is_same<var<X<X<X<int>>>>, int>::value, "");
+
+template <class T>
+class AVL
+{
+    struct node;
+    typedef std::unique_ptr<node> Node;
+    typedef std::unique_ptr<T> Data;
+
+    struct node
+        {
+            Node left;
+            Node right;
+            Data self; // actual container of an AVL. for a simple AVL<int> that would store the unique_id
+                        //in case of AVL<T> self would store the T object f.e an inner AVL.
+            var<T> unique_id; // defines the comparable variable of an AVL.
+            unsigned char height;
+                        /*
+            node(const T &value) : _self(value),_left(nullptr),_right(nullptr)
+            {
+                unique_id = value;
+            }*/
+
+            node(const var<T> id) : self(new T()), left(nullptr), right(nullptr)
+            {
+                //std::unique_ptr<T> _data (new T());
+                //_self = std::move(_data);
+                unique_id = id;
+                height = 1;
+            }
+            //build your own comparisons based on T. following is for T = int
+            bool operator==(const var<T> lhs) const{ return (lhs == unique_id); }
+            bool operator!=(const var<T> lhs) const{ return !operator==(lhs); }
+            bool operator< (const var<T> lhs) const{ return (lhs < unique_id); }
+            bool operator> (const var<T> lhs) const{ return (lhs > unique_id); }
+
+        };
+
+    Node root;
+
+    public:
+
+        AVL() : root(nullptr)
+        {
+            //root = NULL;
+            //node* root = new node;
+        }
+
+        Data& insert_link(var<T> data)//Search F() for a value is not used.Just Insert is called and if the value already exists it does nothing.
+        {
+            if (root == nullptr)
+            {
+                std::unique_ptr<node> _node (new node(data));
+                root = std::move(_node);
+                return root -> self;
+            }
+            else
+            {
+                if (data < root->unique_id)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL<T>;.
+                {
+                    root -> left = std::move(insert_inner(root->left, data));
+                    return root -> left -> self;
+                    //root = balance (root);
+                    //return root->left;
+                }
+                else if (data > root->unique_ide)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL<T>;.
+                {
+                    root -> right = std::move(insert_inner(root->right, data));
+                    return root -> right -> self;
+                    //root = balance (root);
+                    //return root->right;
+                }
+            }
+        }
+
+        bool delete_link(var<T> unique_id)
+        {
+            bool deleted = false;
+            //node* temp = search(root,unique_id); //search searches for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
+            node* temp = delete_inner(root,unique_id); //search searches for a number,if found returns address of node(is overloaded for both internal_avl and avl_node).
+            if(temp!=NULL) deleted = true;
+            temp == NULL;
+            return deleted;
+        }
+
+        Data& get(var<T> key)
+        {
+            return search(root,key);
+        }
+
+        void printTree(ofstream& output){
+            internal_inorder(output,root);
+            output<<std::endl;
+            std::cout<<output.rdbuf();
+        }
+
+    private:
+        //Internal_AVL functions////
+        /*
+        * Delete link recursion
+        */
+        Node delete_inner(Node& _node, var<T> key)//Deletion for internal avl type of struct.
+        {
+            // STEP 1: PERFORM STANDARD BST DELETE
+
+            if (_node == nullptr)
+                return nullptr;
+
+            // If the key to be deleted is smaller than the node's key,
+            // then it lies in left subtree
+            if ( key < _node -> unique_id )
+                delete_inner(_node -> left, key);
+
+            // If the key to be deleted is greater than the node's key,
+            // then it lies in right subtree
+            else if( key > _node -> unique_id )
+                delete_inner(_node -> right, key);
+            // if key is same as node's key, then This is the node
+            // to be deleted
+            else if(_node -> left != nullptr && _node -> right != nullptr)//IF NODE IS FOUND
+            { //basically find the smallest element of the right'est tree
+               auto temp = findmin(node->right).get(); //while travesing the left'est trees
+               _node -> self = std::move(temp -> self);//fetch inner data
+               _node -> unique_id = temp -> unique_id;//and replace id (while keeping siblings)
+              //and issue a new delete for that element starting from the right sub-tree
+              //of the current node ( the one that we initially want to delete )
+              //we also replaced the unique_id of the "deleted" node with that element
+              delete_inner(_node -> right, _node -> unique_id)
+
+            }else{//finally arrive in that element that will def not have a left child
+                  //considering its the smallest element but might or might not have
+                  //a right child. Another case is to land in this else in the 1st issue
+                  //of deletion meaning that the node holding the element of deletion had only
+                  // 1 child or none. (if leaf) in that case we owe to check for left child.
+                  Node temp = std::move(_node); //basically deleted and then
+                  _node = (temp -> left != null) ? std::move(temp->left) :
+                                                   std::move(temp->right);//null or not
+                 //..so if there is a left child(or subtree) move it in place of its parent
+                 //which in 1st case would be the node holding the element of deletion.
+                 //In the 2nd case however we arrived here because we found the smallest Element
+                 //of the right'est subtree and since there is no left child
+                 //we move to the parent of the smallest element, its right sub-tree(n or !n)
+            }
+
+            return balance(_node);
+        }
+
+        Node findmin(Node& _node) // searching the node with the minimal key in p tree
+        {
+            //auto temp = _node.get(); //raw pointer
+            if(_node -> left == nullptr){
+              return _node;
+            }
+            findmin(_node -> left);
+            //return p->left?findmin(p->left):p;
+        }
+
+        /*
+        *Insert Link recursion
+        */
+        Node insert_inner(Node& _node,var<T> unique_id)
+        {
+          if (root == nullptr)
+          {
+              std::unique_ptr<node> _node (new node(data));
+              _node = std::move(_node);
+              return root -> self; //need balance?
+          }
+          else
+          {
+              if (data < root->unique_id)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL<T>;.
+              {
+                  root -> left = std::move(insert_inner(root->left, data));
+                  return root -> left -> self;
+                  //root = balance (root);
+                  //return root->left;
+              }
+              else if (data > root->unique_ide)//In this case the element was not in the tree already.So when the node is NULL it will create space for internal_AVL<T>;.
+              {
+                  root -> right = std::move(insert_inner(root->right, data));
+                  return root -> right -> self;
+                  //root = balance (root);
+                  //return root->right;
+              }
+          }
+          return balance(_node);
+        }
+
+        unsigned char height(Node& _node)
+        {
+            return _node ? _node -> height : 0;
+        }
+
+        int bfactor(Node& _node)
+        {
+            return height(_node -> right) - height(_node -> left);
+        }
+
+        void fixheight(Node& _node)
+        {
+            unsigned char hl = height(p -> left);
+            unsigned char hr = height(p -> right);
+            _node -> height = (hl > hr ? hl : hr) + 1;
+        }
+
+        /*
+         * Balancing AVL<T> Tree
+         */
+        Node balance(Node& _node)
+        {
+            fixheight(_node);
+            if( bfactor(_node)==2 )
+            {
+                if( bfactor(_node->right) < 0 )
+                    _node->right = std::move(rotateright(_node->right));
+                return rotateleft(_node);
+            }
+            if( bfactor(_node)==-2 )
+            {
+                if( bfactor(_node->left) > 0  )
+                    _node->left = std::move(rotateleft(_node->left));
+                return rotateright(_node);
+            }
+            return _node; // no balance needed
+        }
+
+        Node rotateright(Node& _node) // the right rotation round p
+        {
+            auto temp = std::move(_node -> left);
+            _node -> left = std::move(temp -> right);
+            temp -> right = std::move(_node);
+            fixheight(temp);
+            fixheight(_node);
+            return temp;
+        }
+
+        Node rotateleft(Node& _node) // the left rotation round q
+        {
+            auto temp = std::move(_node->right);
+            _node->right = std::move(temp->left);
+            temp->left = std::move(_node);
+            return temp;
+        }
+
+
+
+        /*
+        *Counting The nodes of tree  (FOR AVL<T>_NODE ).
+        */
+        int MBbinarytree_count_recursive(node *node)
+        {
+            int count = 0;
+            if (node != NULL)
+            {
+                count = 1 + MBbinarytree_count_recursive(node->left) + MBbinarytree_count_recursive(node->right);
+            }
+            return count;
+        }
+
+
+
+        Node search(Node& _node,var<T> key)//searches for the Node in the Tree via its data.
+        {                               //Returns the address(avl_node*).
+            if(_node == nullptr || key == _node -> unique_id){
+
+                return _node;
+            }
+            if(key > _node->unique_id)
+            {
+                return search(_node->right,key);
+            }
+            else if(key < _node->unique_id)
+            {
+                return search(_node->left,key);
+            }
+        }
+
+        /*
+        *Returns true if AVL<T> tree with node as node is height-balanced
+        */
+        bool isBalanced(node* node)
+        {
+           int lh; /* for height of left subtree */
+           int rh; /* for height of right subtree */
+
+           /* If tree is empty then return true */
+           if(node == NULL)
+            return true;
+
+           /* Get the height of left and right sub trees */
+           lh = height(node->left);
+           rh = height(node->right);
+
+           if( abs(lh-rh) <= 1 && isBalanced(node->left) && isBalanced(node->right))
+             return true;
+
+           /* If we reach here then tree is not height-balanced */
+           return false;
+        }
+
+
+        /*
+        *Inorder Traversal of Internal AVL<T> tree
+        */
+        void internal_inorder(ofstream& output,node* node)
+        {
+           if(node != NULL)
+           {
+             internal_inorder(output,node->left);
+             output<<node->unique_id<<" ";
+             internal_inorder(output,node->right);
+           }
+           return;
+        }
+
+
+};
+
+#endif // AVL_H

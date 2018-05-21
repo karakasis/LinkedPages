@@ -32,12 +32,12 @@
 	"Controller.h"
 	"InputParser.h"
 
-1526628051 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\inputparser.h
+1526745665 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\inputparser.h
 	<fstream>
 	<iostream>
 	"ezRateProgressBar.hpp"
 	"Array.h"
-	"AVL.h"
+	"AVL.hpp"
 
 1526616021 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\array.cpp
 	"Array.h"
@@ -50,10 +50,10 @@
 1526616021 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\array.h
 	<vector>
 
-1526636990 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
+1526873933 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\inputparser.cpp
 	"InputParser.h"
 	"Array.h"
-	"AVL.h"
+	"AVL.hpp"
 	"ezRateProgressBar.hpp"
 	<fstream>
 	<iostream>
@@ -80,7 +80,7 @@
 	<windows.h>
 	<sys/time.h>
 
-1526637061 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\controller.cpp
+1526847415 source:c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\src\controller.cpp
 	"Controller.h"
 	"InputParser.h"
 	<fstream>
@@ -89,9 +89,9 @@
 	<string>
 	<map>
 
-1526626398 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\controller.h
+1526745623 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\controller.h
 	"Array.h"
-	"AVL.h"
+	"AVL.hpp"
 	<sstream>
 	<map>
 
@@ -161,7 +161,7 @@
 	<sstream>
 	<math.h>
 
-1526637024 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\avl.h
+1526745294 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\avl.h
 	<string.h>
 	<fstream>
 	<cstdlib>
@@ -170,4 +170,17 @@
 	<sstream>
 	<math.h>
 	<iostream>
+
+1526874839 c:\users\xrhstos\documents\2o eksamino\domes dedomenon\linkedpages\include\avl.hpp
+	<string.h>
+	<fstream>
+	<cstdlib>
+	<conio.h>
+	<cstdio>
+	<sstream>
+	<math.h>
+	<iostream>
+	<memory>
+	<tuple>
+	<type_traits>
 

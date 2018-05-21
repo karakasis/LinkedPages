@@ -8,7 +8,7 @@
 
 #include "ezRateProgressBar.hpp"
 #include "Array.h"
-#include "AVL.h"
+#include "AVL.hpp"
 
 
 class InputParser
@@ -17,15 +17,17 @@ class InputParser
         int c,d;
         InputParser();
         virtual ~InputParser();
+
+
         Array readToArray();
-        void readToAVL();
+        AVL<AVL<int>> readToAVL();
 
     protected:
 
     private:
-        int a,b;
         ez::ezRateProgressBar<int> p;
-        std::fstream startLoader();
+        int a,b;
+        void startLoader(std::fstream& infile);
 
 };
 

@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "Array.h"
-#include "AVL.h"
+#include "AVL.hpp"
 #include <sstream>
 #include <map>
 

@@ -36,13 +36,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/AVL.h" />
+		<Unit filename="include/AVL.hpp" />
 		<Unit filename="include/Array.h" />
 		<Unit filename="include/Controller.h" />
 		<Unit filename="include/InputParser.h" />
 		<Unit filename="include/ezRateProgressBar.hpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/AVL.cpp" />
 		<Unit filename="src/Array.cpp" />
 		<Unit filename="src/Controller.cpp" />
 		<Unit filename="src/InputParser.cpp" />

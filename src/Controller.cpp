@@ -80,7 +80,8 @@ void Controller::readCommands(){
 void Controller::executeCommand(const char *cmd_ss){
     InputParser parser;
     //arr = parser.readToArray();
-     parser.readToAVL();
+    avl = parser.readToAVL();
+    //AVL<int> *inner = avl.get(0)->self;
     /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings

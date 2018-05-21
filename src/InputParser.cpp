@@ -1,6 +1,6 @@
 #include "InputParser.h"
 #include "Array.h"
-#include "AVL.h"
+#include "AVL.hpp"
 #include "ezRateProgressBar.hpp"
 
 #include <fstream>
@@ -19,22 +19,23 @@ InputParser::~InputParser()
     //dtor
 }
 
-std::fstream InputParser::startLoader(){
+void InputParser::startLoader(std::fstream& infile){
     int _length;
 
-    std::fstream infile;
-    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-
+    //std::fstream infile;
+    //infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_v_small.txt",std::fstream::in|std::fstream::ate);
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
     _length = sizeof(char) * _length * 0.001;
+    //cout<<_length<<endl;
     infile.seekg(0, ios_base::beg);
-
-    ez::ezRateProgressBar<int> p(_length);
+    p.n = _length;
     p.units = "KB";
     p.start();
-
-    return infile;
 }
 
 
@@ -43,22 +44,8 @@ Array InputParser::readToArray(){
         Array arr(1); //< 1 stands for dynamic allocation step
         int _last;
 
-        //std::fstream infile = startLoader();
-
-
-        int _length;
-
-    std::fstream infile;
-    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-
-    infile.seekg(0,ios_base::end);
-    _length = infile.tellg();
-    _length = sizeof(char) * _length * 0.001;
-    //cout<<_length<<endl;
-    infile.seekg(0, ios_base::beg);
-    ez::ezRateProgressBar<int> p(_length);
-    p.units = "KB";
-    p.start();
+        std::fstream infile;
+        startLoader(infile);
 
 
         if(infile.is_open()){
@@ -77,11 +64,12 @@ Array InputParser::readToArray(){
         else{
             cout<<"File could not open properly"<<endl;
         }
+        cout<<"Sorting..."<<endl;
         arr.sortLinks();
         arr.sortConnectedLinks();
         //  ~TEST~
         std::cout<<endl;
-        arr.show(arr.pairs);
+        //arr.show(arr.pairs);
         //arr.show(arr.connectedPairs);
         //std::cout<<arr.pairs.size()<<" "<<arr.connectedPairs.size()<<endl;
     /*
@@ -112,43 +100,24 @@ Array InputParser::readToArray(){
         return arr;
 }
 
-void InputParser::readToAVL(){
+AVL<AVL<int>> InputParser::readToAVL(){
 
         AVL<AVL<int>> avl;
         AVL<int> *inner_avl;
         //AVL small;
         int _last;
 
-        //std::fstream infile = startLoader();
+        std::fstream infile;
+        startLoader(infile);
 
-
-        int _length;
-
-    std::fstream infile;
-    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
-
-    infile.seekg(0,ios_base::end);
-    _length = infile.tellg();
-    _length = sizeof(char) * _length * 0.001;
-    infile.seekg(0, ios_base::beg);
-
-    ez::ezRateProgressBar<int> p(_length);
-    p.units = "KB";
-    p.start();
 
         if(infile.is_open()){
             //cout<<"File opened successfully"<<endl;
 
             while(infile >> c >> d){
-                //arr.insertPage(c);
-                //arr.insertLink(d);
-                //avl.get(c);
-                if(c == 3)
-                    true;
-                inner_avl = avl.insert_link(c)->self;
-                inner_avl->insert_link(d);
 
-                //arr.makePair(c,d);
+                avl.add(c).add(d);
+
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
                 p.update(_last);
@@ -158,24 +127,52 @@ void InputParser::readToAVL(){
         else{
             cout<<"File could not open properly"<<endl;
         }
+        cout<<endl;
+        cout<<endl;
+        cout<<endl;
+
         std::ofstream out("test.txt", std::ofstream::out);
-        //avl.get(10)->self->delete_link(2);
-        //avl.delete_link(10);
-        //avl.printTree(out);
-        for(int i=0; i<10; i++){
-            inner_avl = avl.get(i)->self;
-            if(inner_avl!=NULL){
-                out<<i<<" : ";
-                inner_avl -> printTree(out);
-            }
+        avl.printLevelOrder(out,1,1,3);
+        avl.get(20).printLevelOrder(out,1,1,3);
+        //std::ofstream out("test.txt", std::ofstream::out);
+
+        avl.get(0).remove(5);
+        avl.get(0).remove(2);
+        avl.get(3).remove(42);
+        avl.get(3).remove(43);
+        //avl.get(3).delete_link(9);
+        avl.get(3).remove(12);
+        avl.remove(12);
+        //avl.delete_link(3);
+        //avl.delete_link(5);
+
+        cout<<"Outer AVL"<<endl;
+        avl.print_cmd();
+        cout<<"Inner AVLs"<<endl;
+        for(int i =0; i<10; i++){
+            avl.get(i).print_cmd();
         }
-        //inner_avl = avl.get(3)->self;
-        //avl.printTree(out);
-        //inner_avl ->printTree(out);
+        avl.get(0).print_cmd();
+        avl.get(1).print_cmd();
+        avl.get(3).print_cmd();
+        avl.get(4).print_cmd();
+        avl.get(5).print_cmd();
+        avl.get(6).print_cmd();
+
+        out<<"Outer AVL"<<endl;
+        avl.print(out);
+        out<<"Inner AVLs"<<endl;
+        avl.get(0).print(out);
+        avl.get(1).print(out);
+        avl.get(3).print(out);
+        avl.get(4).print(out);
+        avl.get(5).print(out);
+        avl.get(6).print(out);
+
         out.close();
-        //std::cout<<out.rdbuf();
 
 
+        return avl;
 
         /*
         arr.sortLinks();
