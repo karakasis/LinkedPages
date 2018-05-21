@@ -19,7 +19,6 @@ Controller::~Controller()
 enum class Commands
 {
     ReadData,
-    WriteIndex,
     InsertLink,
     DeleteLink,
     FindNeighbors,
@@ -32,7 +31,6 @@ enum class Commands
 map<string, Commands> s_mapStringToCommands =
 {
     { "READ_DATA", Commands::ReadData },
-    { "WRITE_INDEX", Commands::WriteIndex },
     { "INSERT_LINK", Commands::InsertLink },
     { "DELETE_LINK", Commands::DeleteLink },
     { "FIND_NEIGHBORS", Commands::FindNeighbors },
@@ -45,7 +43,6 @@ map<string, Commands> s_mapStringToCommands =
 map<Commands, string> s_mapCommandsToString
 {
     {Commands::ReadData, "READ_DATA"},
-    {Commands::WriteIndex, "WRITE_INDEX"},
     {Commands::InsertLink, "INSERT_LINK"},
     {Commands::DeleteLink, "DELETE_LINK"},
     {Commands::FindNeighbors, "FIND_NEIGHBORS"},
@@ -79,24 +76,18 @@ void Controller::readCommands(){
 
 void Controller::executeCommand(const char *cmd_ss){
     InputParser parser;
-    //arr = parser.readToArray();
+    arr = parser.readToArray();
     avl = parser.readToAVL();
-    cout<<".."<<endl;
-    cout<<"Cloning AVL.."<<endl;
-    AVL<AVL<int>> clone(avl);
-    cout<<"Outer AVL n"<<endl;
-    //avl.print_cmd();
-    cout<<"Inner AVL n"<<endl;
-    //avl.get(0).remove(2);
 
-    //avl.get(0).get(1).print_cmd();
-    //avl.get(0).get(1).print_cmd();
-    cout<<"Outer AVL clone"<<endl;
-    //clone.remove(1);
-    //clone.print_cmd();
-    cout<<"Inner AVL clone"<<endl;
-    //clone.get(0).remove(5);
-    //clone.get(0).print_cmd();
+    arr.findNumConnectedComponents();
+    arr.deleteLink(0,5);
+    avl.print_connected_cmd(avl);
+    avl.get(0).remove(5);
+    arr.findNumConnectedComponents();
+    avl.print_connected_cmd(avl);
+    //cout<<"Cloning AVL.."<<endl;
+    //AVL<AVL<int>> clone(avl);
+
     /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings
@@ -138,12 +129,6 @@ void Controller::executeCommand(const char *cmd_ss){
                     {
                         InputParser parser;
                         arr = parser.readToArray();
-                       break;
-                    }
-                    case Commands::WriteIndex :
-                    {
-                        arr.printer();
-                        exit(1);
                        break;
                     }
                     case Commands::InsertLink :

@@ -45,7 +45,6 @@ struct X;
 
 static_assert(std::is_same<var<X<X<X<int>>>>, int>::value, "");
 
-
 template <class T>
 class AVL
 {
@@ -86,7 +85,7 @@ class AVL
         };
 
     Node root;
-    // Number of elements
+    // Helper variables
     std::size_t size;
     bool lockBalance;
     node* saved;
@@ -154,11 +153,50 @@ class AVL
             return data_found  ? saved->self : dummy;
         }
 
+        bool contains(var<T> key)
+        {
+            data_found = false;
+            find(root,key);
+            return data_found;
+        }
+
         Node& getRoot(){
             return this -> root;
         }
 
+        std::vector<var<T>> getNodes(){
+            std::vector<var<T>> nodes;
+            getNodes_inorder(nodes,root);
+            return nodes;
+        }
+
+        /**
+        Find amount of connected components of a 2-dimensional bi-directional graph
+
+        @param AVL must be a nested structure of type AVL < AVL < type > >.
+        */
+        std::vector<std::vector<var<T>>> connected(AVL<T> avl){
+            AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
+            std::vector<std::vector<var<T>>> connected_components; //will keep component's ids
+            connected(avl.root, memory,connected_components,avl);//start
+            return connected_components;
+        }
+
         //PRINTER functions////
+
+        void print_connected_cmd(AVL<T> avl){
+            std::vector<std::vector<int>> connected_components = connected(avl);
+            int size_con_comp = connected_components.size();
+            cout<<"Size of connected_components: "<<size_con_comp<<endl;
+            for(int i=0; i<size_con_comp; i++){
+                cout<<"COMP["<<i<<"]"<<endl;
+                    for(int id : connected_components.at(i)){
+                        cout<<id<<" ";
+                    }
+                cout<<endl;
+            }
+        }
+
         void print(ofstream& output){
             if (size == 0) output<< "{ }";
             else if(size == -1) return;
@@ -181,8 +219,23 @@ class AVL
             }
         }
 
+        void print_all_tree(ofstream& out){
+            cout<<"Trees printed in .txt"<<endl;
+            for(var<T> page : getNodes()){
+                out<<"-->"<<page<<"<--"<<endl;
+                get(page).print_level(out,1,1,3);
+                out<<endl;
+                out<<endl;
+                cout<<"-->"<<page<<"<--"<<endl;
+                get(page).print_cmd();
+                cout<<endl;
+                cout<<endl;
+                cout<<endl;
+            }
+        }
+
         /* Function to print level order traversal a tree*/
-        void printLevelOrder(ofstream& output,int v_scale, int h_scale, int max_num_length)
+        void print_level(ofstream& output,int v_scale, int h_scale, int max_num_length)
         {
             std::vector<std::vector<var<T>>> memory;
             int h = height_helper(root);
@@ -361,6 +414,51 @@ class AVL
             }
         }
 
+        void getNodes_inorder(std::vector<var<T>>& nodes, Node& _node){
+            if (_node != nullptr) {
+             getNodes_inorder(nodes,_node->left);
+             nodes.push_back(_node->unique_id);
+             getNodes_inorder(nodes,_node->right);
+            }
+        }
+
+        void connected(Node& _node, AVL<var<T>>& memory
+               , std::vector<std::vector<var<T>>>& connected_components, AVL<T> avl)
+       {
+            if(_node != nullptr){
+                connected(_node->left, memory, connected_components, avl); //traverse to left of 1st avl
+                if(!memory.contains(_node->unique_id)){ //if node hasnt been assigned to a component
+
+                    std::vector<var<T>> comp; //start a new component
+                    comp.push_back(_node->unique_id); //store component's id
+                    memory.add(_node->unique_id); //write node to memory avl
+                    int vec_size = comp.size();//save prev size
+                    int cur_node_id = _node->unique_id;
+
+                    do{ //repeat
+                        connected_links(avl.get(cur_node_id).getRoot(),memory,comp); //traverse links of 2nd avl
+                        cur_node_id = comp[vec_size-1]; //refresh new size of component
+                        vec_size++; //check next element in component
+                    }while(comp.size() > vec_size); //until no new nodes have not been traversed
+
+                    connected_components.push_back(comp); // finally store component
+                }
+                connected(_node->right,memory, connected_components, avl); // traverse to right of 1st avl;
+            }
+        }
+
+        void connected_links(auto& _node, AVL<var<T>>& memory , std::vector<var<T>>& comp){
+            if(_node != nullptr){
+                connected_links(_node->left, memory, comp); //traverse to left of 2nd avl
+
+                if(!memory.contains(_node->unique_id)){ //if node hasnt been assigned to a component
+                    comp.push_back(_node->unique_id);//store component's id to current component
+                    memory.add(_node->unique_id);//write node to memory avl
+                }
+
+                connected_links(_node->right,memory, comp); // traverse to right of 2nd avl;
+            }
+        }
 
         //Cloning////
         Node clone(const Node& _node) const

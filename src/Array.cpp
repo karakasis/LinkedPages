@@ -267,6 +267,7 @@ void Array::insertConnectedLinkEnd(int page, int link){
 }
 
 void Array::sortLinks(){
+    cout<<"Sorting..."<<endl;
     for(int i=0;i<pairs.size();i=i+1){
         bubbleSort(pairs[i],pairs[i].size());
     }
