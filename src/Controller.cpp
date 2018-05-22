@@ -13,9 +13,7 @@ Controller::~Controller()
     //dtor
 }
 
-/// <summary>
 /// Enum for String values we want to switch on
-/// </summary>
 enum class Commands
 {
     ReadData,
@@ -25,9 +23,7 @@ enum class Commands
     FindNumConnectedComponents
 };
 
-/// <summary>
 /// Map from strings to enum values
-/// </summary>
 map<string, Commands> s_mapStringToCommands =
 {
     { "READ_DATA", Commands::ReadData },
@@ -37,9 +33,7 @@ map<string, Commands> s_mapStringToCommands =
     { "FIND_NUM_CONNECTED_COMPONENTS", Commands::FindNumConnectedComponents },
 };
 
-/// <summary>
 /// Map from enum values to strings
-/// </summary>
 map<Commands, string> s_mapCommandsToString
 {
     {Commands::ReadData, "READ_DATA"},
@@ -50,31 +44,27 @@ map<Commands, string> s_mapCommandsToString
 };
 
 void Controller::readCommands(){
-    ifstream infile("commands.txt");
+    fstream infile;
+    infile.open("commands.txt",std::fstream::in);
+
     string cmd;
+    string b; string c;
     stringstream ss;
-    //infile.open("commands.txt",fstream::in);
-    /*
+
     if(infile.is_open()){
-        while(getline(infile, cmd)){
-                cout<<cmd;
-            //stringstream ss(cmd);
-            //stringstream ss;
-            //ss << cmd;
-            //ss.str("");
-            //ss.clear();
-            //ss << cmd << endl;
-            //vector<int> ints;  //container to store ints
-    //vector<string> strings;  //container to store strings
-            //split(cmd.c_str(),ints,strings);
-            executeCommand(cmd.c_str());
+        while(getline(infile,cmd)){
+            stringstream ss;
+            ss.str(cmd);
+            cout<<"Executing command : "<<cmd;
+            executeCommand(ss);
         }
+
+            cout<<"Executing stop : "<<cmd;
     }
-    */
-    executeCommand(cmd.c_str());
 }
 
-void Controller::executeCommand(const char *cmd_ss){
+void Controller::executeCommand(stringstream& ss){
+    /*
     InputParser parser;
     arr = parser.readToArray();
     avl = parser.readToAVL();
@@ -87,120 +77,130 @@ void Controller::executeCommand(const char *cmd_ss){
     avl.print_connected_cmd(avl);
     //cout<<"Cloning AVL.."<<endl;
     //AVL<AVL<int>> clone(avl);
+*/
 
-    /*
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings
-    istringstream ss( cmd_ss );
-    cout<<cmd_ss;
-    std::istringstream buf(cmd_ss);
-    std::istream_iterator<std::string> beg(buf), end;
-
-    std::vector<std::string> tokens(beg, end); // done!
-
-    for(auto& s: tokens)
-        std::cout << '"' << s << '"' << '\n';
-        //comment above while
-    while(true) {
-      int intValue;
-      char* stringValue;
-      if(ss.eof())
-        break;
-
-      if(ss >> intValue) {
-        ints.push_back(intValue);
-      } else if (ss >> stringValue) {
-        strings.push_back(stringValue);
-      } else {
-        cout << "Error: unknown value read in, not recognized as int or string" << endl;
-        exit(-1);
-      }
-    }
-
+    split(ss.str().c_str(),ints,strings);
 
     Commands cmd = s_mapStringToCommands[strings.at(0)];
 
-    switch(argSwitch){
-        case 1 :
-            {
+    if(argSwitch == 1){ cout<<"not here pls"<<endl;
+            switch(cmd){
+                case Commands::ReadData :
+                {
+                    InputParser parser;
+                    arr = parser.readToArray();
+                   break;
+                }
+                case Commands::InsertLink :
+                {
+                    arr.insertLink(ints.at(0),ints.at(1));
+                   break;
+                }
+                case Commands::DeleteLink :
+                {
+                    arr.deleteLink(ints.at(0),ints.at(1));
+                   break;
+                }
+                case Commands::FindNeighbors :
+                {
+                    arr.findNeighbors(ints.at(0));
+                   break;
+                }
+                case Commands::FindNumConnectedComponents :
+                {
+                    arr.findNumConnectedComponents();
+                   break;
+                }
+                default:
+                    cout<<"Invalid user input.";
+                }
+}
+    else if(argSwitch == 2)
+            switch(cmd){
+                case Commands::ReadData :
+                {
+                    InputParser parser;
+                    avl = parser.readToAVL();
+                   break;
+                }
+                case Commands::InsertLink :
+                {
+                    avl.add(ints.at(0)).add(ints.at(1));
+                    avl.add(ints.at(1)).add(ints.at(0));
+                   break;
+                }
+                case Commands::DeleteLink :
+                {
+                    avl.get(ints.at(0)).remove(ints.at(1));
+                    avl.get(ints.at(1)).remove(ints.at(0));
+                   break;
+                }
+                case Commands::FindNeighbors :
+                {
+                    //avl.findNeighbors(ints.at(1));
+                    cout<<"under development"<<endl;
+                   break;
+                }
+                case Commands::FindNumConnectedComponents :
+                {
+                    avl.print_connected_cmd(avl);
+                   break;
+                }
+                default:
+                    cout<<"Invalid user input.";
 
-                switch(cmd){
-                    case Commands::ReadData :
-                    {
-                        InputParser parser;
-                        arr = parser.readToArray();
-                       break;
-                    }
-                    case Commands::InsertLink :
-                    {
-                        arr.insertLink(ints.at(0),ints.at(1));
-                       break;
-                    }
-                    case Commands::DeleteLink :
-                    {
-                        arr.deleteLink(ints.at(0),ints.at(1));
-                       break;
-                    }
-                    case Commands::FindNeighbors :
-                    {
-                        cout<<"under_development"<<endl;
-                       break;
-                    }
-                    case Commands::FindNumConnectedComponents :
-                    {
-                        cout<<"under_development"<<endl;
-                       break;
-                    }
-                    default:
-                        cout<<"Invalid user input.";
-            }
-        case 2:
-            {
-            //AVL
-            cout<<"AVL"<<endl;
-            break;
-            }
-        case 3:
-            {
-            //hashtable
-            cout<<"hashtable"<<endl;
-            break;
-            }
-        default:
-            cout<<"Invalid user input.";
+                }
+    else if(argSwitch == 3)
+        cout<<"hashtable--"<<endl;
+    else
+        cout<<"Invalid user input.";
 
-            }
-    }
-    */
 }
 
-vector<string> Controller::split(const char *str, vector<int> &ints, vector<string> &strings)
+vector<string> Controller::split(const char* str, vector<int> &ints, vector<string> &strings)
 {
 
     vector<string> result;
     char space = ' ';
     char tab = '\t';
     int i =0;
-    /*
+
         const char *begin = str;
 
-        while( (*str != space || *str!= tab ) && *str){//look for string command
-           cout<<"["<< *str<<"]";
+        while( (*str != space && *str!= tab ) && *str){//look for string command
            str++;
-           i++;
         }
         strings.push_back(string(begin, str));
-        string test = &str.substr(i);
-        cout<<"["<<test<<"]";
+        //cout<<"["<<strings[0]<<"]";
+
+        str++;
+        const char *begin2 = str;
+        while( (*str != space && *str!= tab ) && *str){//look for int
+           str++;
+        }
+        ints.push_back(atoi(string(begin2,str).c_str()));
+        //cout<<" ["<<ints[0]<<"]";
+
+        str++;
+        const char *begin3 = str;
+        while( (*str != space && *str!= tab ) && *str){//look for int
+           str++;
+        }
+        ints.push_back(atoi(string(begin3,str).c_str()));
+        //cout<<" ["<<ints[1]<<"]";
+
+        /*
         istringstream is( test );
         int n;
         while( is >> n ) {
              // do something with n
              ints.push_back(n);
         }
-
-
 */
+
+
 
     return result;
 

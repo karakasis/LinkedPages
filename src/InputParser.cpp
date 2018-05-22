@@ -41,7 +41,7 @@ void InputParser::startLoader(std::fstream& infile){
 
 Array InputParser::readToArray(){
 
-        Array arr(1); //< 1 stands for dynamic allocation step
+        Array arr; //< 1 stands for dynamic allocation step
         int _last;
 
         std::fstream infile;

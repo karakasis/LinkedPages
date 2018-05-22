@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    Controller(atoi(argv[1]));
+    //Controller(atoi(argv[1]));
+    Controller(1);
     return 0;
 }

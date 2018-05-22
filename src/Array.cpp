@@ -9,15 +9,14 @@
 
 using namespace std;
 
-Array::~Array()
-{
-
-}
-
 //IO Functions
 
 void Array::insertLink(int page, int link){
     cout<<"running: insertLink("<<page<<","<<link<<");"<<endl;
+    vector<int> ins;
+    ins.push_back(page);
+    ins.push_back(link);
+    instructor->insertions.push_back(ins);
     if(pairs.size()<=page){
         cout<<"page "<<page<<" was created"<<"[NORMAL]"<<endl;
         makePair(page,link);
@@ -45,6 +44,10 @@ void Array::insertLink(int page, int link){
 
 void Array::deleteLink(int page, int link){
     cout<<"running: deleteLink("<<page<<","<<link<<");"<<endl;
+    vector<int> del;
+    del.push_back(page);
+    del.push_back(link);
+    instructor->deletions.push_back(del);
     if(pairs.size() <= page){
         cout<<"page "<<page<<" not found"<<"[NORMAL]"<<endl;
     }else{
@@ -66,6 +69,21 @@ void Array::deleteLink(int page, int link){
 
 }
 
+void Array::findNeighbors(int page){
+    cout<<"running: findNeighbors("<<page<<");"<<endl;
+    if(pairs.at(page).size()!=0){
+        cout<<"[ ";
+        for(int n : findNeighbors(pairs.at(page))){
+            cout<<n<<" ";
+        }
+        cout<<"]"<<endl;
+    }
+    else
+        cout<<"page "<<page<<" not found"<<endl;
+
+    cout<<endl;
+}
+
 std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
 
     neighbors.erase(neighbors.begin());
@@ -74,6 +92,8 @@ std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
 
 int Array::findNumConnectedComponents(){
     cout<<"running: findNumConnectedComponents();"<<endl;
+    //trigger cloning
+    instructor->cloned = new Array(*this);
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete
     color = new int[connectedPairs.size()];
@@ -81,7 +101,8 @@ int Array::findNumConnectedComponents(){
         color[i]=1; //oloi oi komvoi white(arxikopoiisi)
     }
     int cc=DFS();
-    cout<<"returns"<<cc<<endl;
+    cout<<"returns "<<cc<<endl;
+    cout<<endl;
     return cc;
 }
 

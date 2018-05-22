@@ -13,7 +13,7 @@
 #include <tuple>
 #include <type_traits>
 
-using namespace std;
+//using namespace std;
 
 /*
  * Class Declaration
@@ -182,22 +182,36 @@ class AVL
             return connected_components;
         }
 
+        /**
+        Find neighbors of node of a 2-dimensional bi-directional graph
+        where node consists of its inner avl.
+
+        @param AVL must be a nested structure of type AVL < AVL < type > >.
+        @return a vector of var<T> with all neighbor-nodes.
+        */
+        std::vector<std::vector<var<T>>> findNeighbors(AVL<T> avl){
+            AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
+            std::vector<std::vector<var<T>>> connected_components; //will keep component's ids
+            connected(avl.root, memory,connected_components,avl);//start
+            return connected_components;
+        }
+
         //PRINTER functions////
 
         void print_connected_cmd(AVL<T> avl){
             std::vector<std::vector<int>> connected_components = connected(avl);
             int size_con_comp = connected_components.size();
-            cout<<"Size of connected_components: "<<size_con_comp<<endl;
+            std::cout<<"Size of connected_components: "<<size_con_comp<<std::endl;
             for(int i=0; i<size_con_comp; i++){
-                cout<<"COMP["<<i<<"]"<<endl;
+                std::cout<<"COMP["<<i<<"]"<<std::endl;
                     for(int id : connected_components.at(i)){
-                        cout<<id<<" ";
+                        std::cout<<id<<" ";
                     }
-                cout<<endl;
+                std::cout<<std::endl;
             }
         }
 
-        void print(ofstream& output){
+        void print(std::ofstream& output){
             if (size == 0) output<< "{ }";
             else if(size == -1) return;
             else{
@@ -219,23 +233,23 @@ class AVL
             }
         }
 
-        void print_all_tree(ofstream& out){
-            cout<<"Trees printed in .txt"<<endl;
+        void print_all_tree(std::ofstream& out){
+            std::cout<<"Trees printed in .txt"<<std::endl;
             for(var<T> page : getNodes()){
-                out<<"-->"<<page<<"<--"<<endl;
+                out<<"-->"<<page<<"<--"<<std::endl;
                 get(page).print_level(out,1,1,3);
-                out<<endl;
-                out<<endl;
-                cout<<"-->"<<page<<"<--"<<endl;
+                out<<std::endl;
+                out<<std::endl;
+                std::cout<<"-->"<<page<<"<--"<<std::endl;
                 get(page).print_cmd();
-                cout<<endl;
-                cout<<endl;
-                cout<<endl;
+                std::cout<<std::endl;
+                std::cout<<std::endl;
+                std::cout<<std::endl;
             }
         }
 
         /* Function to print level order traversal a tree*/
-        void print_level(ofstream& output,int v_scale, int h_scale, int max_num_length)
+        void print_level(std::ofstream& output,int v_scale, int h_scale, int max_num_length)
         {
             std::vector<std::vector<var<T>>> memory;
             int h = height_helper(root);
@@ -263,23 +277,23 @@ class AVL
             int level_whitespace = 2*max_num_len + min_whitespace + max_whitespace;
             int level_padding = max_num_len + max_whitespace/2;//+ min_whitespace*0/2
 
-            string stand_in = "[";
+            std::string stand_in = "[";
             for(int i=0; i<max_num_len-2; i++){
                 stand_in += " ";
             }
             stand_in += "]";
 
-            string min_whites;
+            std::string min_whites;
             for(int i=0; i<min_whitespace; i++){
                 min_whites += " ";
             }
 
-            string max_whites;
+            std::string max_whites;
             for(int i=0; i<max_whitespace; i++){
                 max_whites += " ";
             }
 
-            string index_padding = "\t\t\t\t";
+            std::string index_padding = "\t\t\t\t";
 
             std::vector<var<T>> level;
             int level_len;
@@ -334,7 +348,7 @@ class AVL
                 }
                 //              leave new lines based on vertical scale
                 for(int i=0; i<v_tree_scale;i++)
-                    output<<endl;
+                    output<<std::endl;
             }
         }
 
@@ -345,7 +359,7 @@ class AVL
         /*
         *Inorder Traversal of Internal AVL<T> tree
         */
-        void internal_inorder(ofstream& output,Node& _node)
+        void internal_inorder(std::ofstream& output,Node& _node)
         {
            if(_node != nullptr)
            {
