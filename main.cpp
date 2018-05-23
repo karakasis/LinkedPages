@@ -13,6 +13,6 @@ int main(int argc, char* argv[])
     }
 
     //Controller(atoi(argv[1]));
-    Controller(1);
+    Controller(2);
     return 0;
 }

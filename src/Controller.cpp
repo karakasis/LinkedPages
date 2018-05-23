@@ -52,14 +52,12 @@ void Controller::readCommands(){
     stringstream ss;
 
     if(infile.is_open()){
-        while(getline(infile,cmd)){
-            stringstream ss;
+        while(getline(infile,cmd)){\
             ss.str(cmd);
-            cout<<"Executing command : "<<cmd;
             executeCommand(ss);
+            ss.str("");
+            ss.clear();
         }
-
-            cout<<"Executing stop : "<<cmd;
     }
 }
 
@@ -71,10 +69,10 @@ void Controller::executeCommand(stringstream& ss){
 
     arr.findNumConnectedComponents();
     arr.deleteLink(0,5);
-    avl.print_connected_cmd(avl);
+    avl.print_connected_cmd();
     avl.get(0).remove(5);
     arr.findNumConnectedComponents();
-    avl.print_connected_cmd(avl);
+    avl.print_connected_cmd();
     //cout<<"Cloning AVL.."<<endl;
     //AVL<AVL<int>> clone(avl);
 */
@@ -85,7 +83,7 @@ void Controller::executeCommand(stringstream& ss){
 
     Commands cmd = s_mapStringToCommands[strings.at(0)];
 
-    if(argSwitch == 1){ cout<<"not here pls"<<endl;
+    if(argSwitch == 1)
             switch(cmd){
                 case Commands::ReadData :
                 {
@@ -116,7 +114,6 @@ void Controller::executeCommand(stringstream& ss){
                 default:
                     cout<<"Invalid user input.";
                 }
-}
     else if(argSwitch == 2)
             switch(cmd){
                 case Commands::ReadData :
@@ -127,14 +124,12 @@ void Controller::executeCommand(stringstream& ss){
                 }
                 case Commands::InsertLink :
                 {
-                    avl.add(ints.at(0)).add(ints.at(1));
-                    avl.add(ints.at(1)).add(ints.at(0));
+                    avl.createLink(ints.at(0),ints.at(1));
                    break;
                 }
                 case Commands::DeleteLink :
                 {
-                    avl.get(ints.at(0)).remove(ints.at(1));
-                    avl.get(ints.at(1)).remove(ints.at(0));
+                    avl.deleteLink(ints.at(0),ints.at(1));
                    break;
                 }
                 case Commands::FindNeighbors :
