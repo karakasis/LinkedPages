@@ -90,8 +90,8 @@ void Array::findNumConnectedComponents(){
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete    cout<<
-    cout<<cloned.pairs.size()<<endl;
-    cout<<pairs.size()<<endl;
+    //cout<<cloned.pairs.size()<<endl;
+    //cout<<pairs.size()<<endl;
     color = new int[cloned.pairs.size()];
 
     for(int i =0;i<cloned.pairs.size();i++){

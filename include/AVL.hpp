@@ -81,20 +81,19 @@ class AVL
     */
 
     //this will only get called during cloning
-    void duplicateLinks(Node& _node , AVL<T>& avl){
-        //preorder will increase speed?
+    void duplicateLinks(Node& _node , AVL<T>& avl){ // _node is root of normal tree, avl is cloned tree
         if(_node!=nullptr){
-            duplicateLinks(_node -> left, avl);
-            duplicateInnerLinks((_node->self).getRoot(), (_node->self).getRoot()->unique_id, avl);
-            duplicateLinks(_node -> right, avl);
+            duplicateLinks(_node -> left, avl); //traverse left tree of 1st avl (normal)
+            duplicateInnerLinks((_node->self).getRoot(), _node->unique_id, avl); // 1st argument node of 1st avl = page_node , 2nd arg. = page_id
+            duplicateLinks(_node -> right, avl);//traverse right tree of 1st avl (normal)
         }
     }
     //this will only get called during cloning
-    void duplicateInnerLinks(auto& _node, var<T> parent_id, AVL<T>& avl){
+    void duplicateInnerLinks(auto& _node, var<T> parent_id, AVL<T>& avl){ //(parent node, page_id, cloned avl)
         if(_node!=nullptr){
-            duplicateInnerLinks(_node->left,parent_id, avl);
-            avl.createLink(_node->unique_id,parent_id);
-            duplicateInnerLinks(_node->right,parent_id, avl);
+            duplicateInnerLinks(_node->left,parent_id, avl); // traverse links of normal tree - left
+            avl.createLink(_node->unique_id,parent_id); // find link_id and create link insertLink(link,page) in cloned avl.
+            duplicateInnerLinks(_node->right,parent_id, avl); // traverse links of normal tree - right
         }
     }
 
@@ -259,6 +258,10 @@ class AVL
             return nodes;
         }
 
+        std::size_t getSize(){
+            return size;
+        }
+
         /**
         Find amount of connected components of a 2-dimensional bi-directional graph
 
@@ -285,12 +288,30 @@ class AVL
         @param AVL must be a nested structure of type AVL < AVL < type > >.
         @return a vector of var<T> with all neighbor-nodes.
         */
-        std::vector<std::vector<var<T>>> findNeighbors(AVL<T>& avl){
-            //std::cout<<"running: findNeighbors("<<page<<");"<<std::endl;
-            AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
-            std::vector<std::vector<var<T>>> connected_components; //will keep component's ids
-            connected(avl.root, memory,connected_components,avl);//start
-            return connected_components;
+        std::vector<var<T>>& findNeighbors(var<T> id){
+            std::cout<<"running: findNeighbors("<<id<<");"<<std::endl;
+            std::vector<var<T>> neig;
+            T found = get(id);
+            if(found.getSize() == -1){
+                std::cout<<"page "<<id<<" doesn't exist."<<std::endl;
+            }else{
+                findNeighbors(neig, found.getRoot());
+            }
+            std::cout<<"[ ";
+            for(var<T> sibl : neig){
+                std::cout<<sibl<<" ";
+            }
+            std::cout<<"]"<<std::endl;
+            std::cout<<std::endl;
+            return neig;
+        }
+
+        void findNeighbors(std::vector<var<T>>& vec, auto& _node){
+            if(_node!=nullptr){
+                findNeighbors(vec, _node->left);
+                vec.push_back(_node->unique_id);
+                findNeighbors(vec, _node->right);
+            }
         }
 
         //PRINTER functions////
@@ -325,15 +346,19 @@ class AVL
 
         }
 
-        void print_all_tree(std::ostream& out){
+        void print_all_tree(std::ostream& out, AVL<T>& avl){
             std::cout<<"Trees printed in outputstream"<<std::endl;
-            for(var<T> page : getNodes()){
+            out<<"-->Parent tree<--"<<std::endl;
+            avl.print_level(out,1,1,3);
+            out<<std::endl;
+            out<<std::endl;
+            for(var<T> page : avl.getNodes()){
                 out<<"-->"<<page<<"<--"<<std::endl;
-                get(page).print_level(out,1,1,3);
+                avl.get(page).print_level(out,1,1,3);
                 out<<std::endl;
                 out<<std::endl;
                 out<<"-->"<<page<<"<--"<<std::endl;
-                get(page).print(out);
+                avl.get(page).print(out);
                 out<<std::endl;
                 out<<std::endl;
                 out<<std::endl;

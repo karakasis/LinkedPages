@@ -136,14 +136,14 @@ void Controller::executeCommand(stringstream& ss){
                 }
                 case Commands::FindNeighbors :
                 {
-                    //avl.findNeighbors(ints.at(1));
-                    cout<<"under development"<<endl;
+                    avl.findNeighbors(ints.at(0));
+                    //cout<<"under development"<<endl;
                    break;
                 }
                 case Commands::FindNumConnectedComponents :
                 {
                     ofstream out("test.txt", ofstream::out);
-                    //avl.print_all_tree(out);
+                    //avl.print_all_tree(out,avl); //< this will print the normal tress
                     avl.connected(avl,cout);
                    break;
                 }
