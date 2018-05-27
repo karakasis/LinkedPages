@@ -13,7 +13,7 @@ class HashEntry
         HashEntry(int page,HashTableLinks table);
         //Constructor for hashtablelinks
         //key=page
-        HashEntry(int key,int page,int foo);
+        //HashEntry(int key,int page,int foo);
         ~HashEntry();
         int getPage();
         int getKey();

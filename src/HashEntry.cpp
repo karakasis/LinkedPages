@@ -35,7 +35,7 @@ int HashEntry::getKey(){
     return key;
 }
 
-HashTableLinks HashEntry::getLinks(){
+HashTableLinks& HashEntry::getLinks(){
     return links;
 }
 

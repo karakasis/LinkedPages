@@ -1,4 +1,4 @@
-//Parent class of HashTablePage and HashTableLinks
+
 
 #include "HashTable.h"
 
@@ -47,7 +47,7 @@ HashTableLinks HashTable::get(int key){
     }
 }
 
-void HashTable::put(int key,HashTableLinks links){
+void HashTable::put(int key,int link){
     int hash = (key%tableSize);
     int initialHash = -1;
     int indexOfDeletedEntry = -1;
@@ -64,14 +64,19 @@ void HashTable::put(int key,HashTableLinks links){
         hash = (hash+1)%tableSize;
     }
     if(table[hash]==NULL || hash==initialHash && indexOfDeletedEntry != -1){
-        table[indexOfDeletedEntry] = new HashEntry(page,links);
+        HashTableLinks links;
+        links.put(link,link);
+        table[indexOfDeletedEntry] = new HashEntry(page,links);  //isws na xreiazetai &
         size = size+1;
     }
     else if(initialHash!=hash){
         if(table[hash] != DeletedEntry::getUniqueDeletedEntry() && table[hash] != NULL && table[hash]->getPage() == page){
-            table[hash].setLinks(links);
+            table[hash].getLinks().put(link,link);
+            //table[hash].setLinks(links);
         }
         else{
+            HashTableLinks links;
+            links.put(link,link);
             table[hash]= new HashEntry(page,links);
             size = size+1;
         }

@@ -26,7 +26,7 @@ class HashTable
         float threshold;
         int maxSize;
         int size;
-        HashEntry table;
+        HashEntry **table;
         void resize();
 
 };

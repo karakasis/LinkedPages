@@ -39,12 +39,22 @@
 		<Unit filename="include/AVL.hpp" />
 		<Unit filename="include/Array.h" />
 		<Unit filename="include/Controller.h" />
+		<Unit filename="include/DeletedEntry.h" />
+		<Unit filename="include/HashEntry.h" />
+		<Unit filename="include/HashTable.h" />
+		<Unit filename="include/HashTableLinks.h" />
 		<Unit filename="include/InputParser.h" />
+		<Unit filename="include/LinkedHashEntry.h" />
 		<Unit filename="include/ezRateProgressBar.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Array.cpp" />
 		<Unit filename="src/Controller.cpp" />
+		<Unit filename="src/DeletedEntry.cpp" />
+		<Unit filename="src/HashEntry.cpp" />
+		<Unit filename="src/HashTable.cpp" />
+		<Unit filename="src/HashTableLinks.cpp" />
 		<Unit filename="src/InputParser.cpp" />
+		<Unit filename="src/LinkedHashEntry.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
