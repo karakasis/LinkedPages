@@ -9,35 +9,15 @@
 
 class Array
 {
-    Array *cloned;
-    std::vector<std::vector<int>> insertions;
-    std::vector<std::vector<int>> deletions;
-
-    void duplicateInstructions(){
-
-        for(std::vector<int> pairs : insertions){
-            cloned->makePair(pairs[0],pairs[1]);
-            cloned->makePair(pairs[1],pairs[0]);
-        }
-        for(std::vector<int> pairs : deletions){
-            cloned->deleteLink(pairs[0],pairs[1]);
-            cloned->deleteLink(pairs[1],pairs[0]);
-        }
-        insertions.clear();
-        deletions.clear();
-    }
-
-    //this will only get called during cloning and only from the clone object
-    void duplicateLinks(){
-        std::vector<std::vector<int>> clonePairs(pairs);
-        for(std::vector<int> row : clonePairs){
+    //this will only get called during cloning
+    void duplicateLinks(Array& cloned){
+        for(std::vector<int> row : pairs){
             if(row.size()!=0){ //< is this correct?
                 for(int i=1; i<row.size(); i++){
-                    makePair(row[i],row[0]);
+                    cloned.makePair(row[i],row[0]);
                 }
             }
         }
-        clonePairs.clear();
     }
 
 
@@ -57,7 +37,7 @@ class Array
         //copy constructor
         Array(const Array& other)
         : pairs{other.pairs}, allocationStep{other.allocationStep}
-            {duplicateLinks(); }
+            {}
 
         //move constructor c++11
          Array(Array&& other) noexcept
@@ -76,9 +56,9 @@ class Array
 
             swap(src.pairs, oper.pairs);
             swap(src.allocationStep, oper.allocationStep);
-            swap(src.cloned, oper.cloned);
-            swap(src.insertions, oper.insertions);
-            swap(src.deletions, oper.deletions);
+            //swap(src.cloned, oper.cloned);
+            //swap(src.insertions, oper.insertions);
+            //swap(src.deletions, oper.deletions);
         }
 
         int allocationStep;
@@ -103,10 +83,11 @@ class Array
         void reAllocVector();
 
         void bubbleSort(std::vector<int> &arr, int n);
+        void quickSort(std::vector<int> &arr,int left, int right);
         int binarySearch(std::vector<int> arr, int l, int r, int x);
         void swapCells(int *xp, int *yp);
-        int DFS();
-        void DFSvisit(int u);
+        int DFS(Array& cloned);
+        void DFSvisit(int u, Array& cloned);
         int *color;
 
 };

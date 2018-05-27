@@ -59,10 +59,44 @@ class AVL
     bool data_found;
     T dummy;
 
+    /* used different method.
     // Cloning for components variables
     AVL<T> *cloned;
     std::vector<std::vector<var<T>>> insertions; //this 2d vectoring is enforced since con. components
     std::vector<std::vector<var<T>>> deletions; //only works for 2d AVL in the 1st place... also inner avl will carry this but it wont use it or fill it
+
+    void duplicateInstructions(AVL<T>& avl){
+
+        for(std::vector<int> pairs : insertions){
+            avl.cloned->insertLink(pairs[0],pairs[1]);
+            avl.cloned->insertLink(pairs[1],pairs[0]);
+        }
+        for(std::vector<int> pairs : deletions){
+            avl.cloned->deleteLink(pairs[0],pairs[1]);
+            avl.cloned->deleteLink(pairs[1],pairs[0]);
+        }
+        avl.insertions.clear();
+        avl.deletions.clear();
+    }
+    */
+
+    //this will only get called during cloning
+    void duplicateLinks(Node& _node , AVL<T>& avl){
+        //preorder will increase speed?
+        if(_node!=nullptr){
+            duplicateLinks(_node -> left, avl);
+            duplicateInnerLinks((_node->self).getRoot(), (_node->self).getRoot()->unique_id, avl);
+            duplicateLinks(_node -> right, avl);
+        }
+    }
+    //this will only get called during cloning
+    void duplicateInnerLinks(auto& _node, var<T> parent_id, AVL<T>& avl){
+        if(_node!=nullptr){
+            duplicateInnerLinks(_node->left,parent_id, avl);
+            avl.createLink(_node->unique_id,parent_id);
+            duplicateInnerLinks(_node->right,parent_id, avl);
+        }
+    }
 
     struct node
         {
@@ -94,41 +128,17 @@ class AVL
                   self{std::forward<T>(T(_self))}, // notice that T has to support cloning for AVL to retain T for itself
                   height{h}, unique_id{id} {}
 
+                  //replace return with custom implementation. remember var<T> is the innermost type.
+                  //f.e if u do AVL<vector<CUSTOM_CLASS>> THEN manage how to compare ur custom classes to balance your AVL.
+                  //if ur innermost type is a base type f.e float double int string etc..
+                  //then the overload is invalid , since operator overloading is allowed only for user-defined types
+                  //and the operation will be handled from c++.
+            bool operator< (const var<T> &rhs) { return unique_id<rhs;}
+            bool operator> (const var<T> &rhs) { return unique_id>rhs;}
+            bool operator== (const var<T> &rhs) { return unique_id == rhs;}
+            bool operator!= (const var<T> &rhs) { return unique_id != rhs;}
+
         };
-
-
-
-    void duplicateInstructions(){
-
-        for(std::vector<int> pairs : insertions){
-            cloned->add(pairs[0]).add(pairs[1]);
-            cloned->add(pairs[1]).add(pairs[0]);
-        }
-        for(std::vector<int> pairs : deletions){
-            cloned->get(pairs[0]).remove(pairs[1]);
-            cloned->get(pairs[1]).remove(pairs[0]);
-        }
-        insertions.clear();
-        deletions.clear();
-    }
-
-    //this will only get called during cloning and only from the clone object
-    void duplicateLinks(Node& _node){
-        //preorder will increase speed?
-        duplicateLinks(_node -> left);
-        //
-        duplicateInnerLinks((_node->self).getRoot(), (_node->self).getRoot()->unique_id);
-        //
-        duplicateLinks(_node -> right);
-    }
-
-    void duplicateInnerLinks(Node& _node, var<T> parent_id){
-        duplicateInnerLinks(_node->left,parent_id);
-        *cloned->add(_node->unique_id).add(parent_id);
-        duplicateInnerLinks(_node->right);
-        //
-    }
-
 
     public:
 
@@ -165,43 +175,46 @@ class AVL
 
             swap(src.root, oper.root);
             swap(src.size, oper.size);
-
+            /*
             swap(src.cloned, oper.cloned);
             swap(src.insertions, oper.insertions);
-            swap(src.deletions, oper.deletions);
+            swap(src.deletions, oper.deletions);*/
         }
 
         void insertLink(var<T> in, var<T> that)
         {
             std::cout<<"running: insertLink("<<in<<","<<that<<");"<<std::endl;
             //this is missing the ability to insert a page if it doesnt exist.
+            /*
             std::vector<var<T>> ins;
             ins.push_back(in);
             ins.push_back(that);
             insertions.push_back(ins);
-
+            */
             get(in).add(that);
         }
 
         void createLink(var<T> in, var<T> that)
         {
             //this HAS the ability to insert a page if it doesnt exist.
+            /*
             std::vector<var<T>> ins;
             ins.push_back(in);
             ins.push_back(that);
             insertions.push_back(ins);
-
+            */
             add(in).add(that);
         }
 
         void deleteLink(var<T> from, var<T> that)
         {
             std::cout<<"running: deleteLink("<<from<<","<<that<<");"<<std::endl;
+            /*
             std::vector<var<T>> del;
             del.push_back(from);
             del.push_back(that);
             deletions.push_back(del);
-
+            */
             get(from).remove(that);
         }
 
@@ -251,18 +264,17 @@ class AVL
 
         @param AVL must be a nested structure of type AVL < AVL < type > >.
         */
-        std::vector<std::vector<var<T>>> connected(AVL<T> avl){
+        std::vector<std::vector<var<T>>> connected(){
             std::cout<<"running: findNumConnectedComponents();"<<std::endl;
             std::cout<<"Cloning ..."<<std::endl;
-            if(!avl.cloned)
-                avl.cloned = new AVL<T>(avl);
-            std::cout<<"Updating clone ..."<<std::endl;
-            //duplicateLinks(root);
-            //duplicateInstructions();
+            AVL<T> clone(*this);
+            duplicateLinks(root, clone);
+            std::cout<<"Finished cloning "<<std::endl;
+            //duplicateInstructions(clone);
 
             AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
             std::vector<std::vector<var<T>>> connected_components; //will keep component's ids
-            connected(avl.cloned->root, memory,connected_components,*avl.cloned);//start
+            connected_inner(clone.root, memory,connected_components,clone);//start
             return connected_components;
         }
 
@@ -273,7 +285,7 @@ class AVL
         @param AVL must be a nested structure of type AVL < AVL < type > >.
         @return a vector of var<T> with all neighbor-nodes.
         */
-        std::vector<std::vector<var<T>>> findNeighbors(AVL<T> avl){
+        std::vector<std::vector<var<T>>> findNeighbors(AVL<T>& avl){
             //std::cout<<"running: findNeighbors("<<page<<");"<<std::endl;
             AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
             std::vector<std::vector<var<T>>> connected_components; //will keep component's ids
@@ -283,58 +295,53 @@ class AVL
 
         //PRINTER functions////
 
-        void print_connected_cmd(AVL<T> avl){
-            std::vector<std::vector<var<T>>> connected_components = connected(avl);
+        void connected(AVL<T>& avl, std::ostream& out){
+            std::vector<std::vector<var<T>>> connected_components = connected();
             int size_con_comp = connected_components.size();
-            std::cout<<"Size of connected_components: "<<size_con_comp<<std::endl;
+            out<<"Size of connected_components: "<<size_con_comp<<std::endl;
             for(int i=0; i<size_con_comp; i++){
-                std::cout<<"COMP["<<i<<"]"<<std::endl;
+                out<<"COMP["<<i<<"]"<<std::endl;
+                if(connected_components.at(i).size()<=100){
+                    out<<"[ ";
                     for(int id : connected_components.at(i)){
-                        std::cout<<id<<" ";
+                        out<<id<<" ";
                     }
-                std::cout<<std::endl;
+                    out<<"]";
+                }
+                else
+                    out<<"Component's size is bigger than 100. Print skipped.";
+                out<<std::endl;
             }
         }
 
-        void print(std::ofstream& output){
-            if (size == 0) output<< "{ }";
+        void print(std::ostream& out){
+            if (size == 0) out<< "{ }";
             else if(size == -1) return;
             else{
-                output<< "{ ";
-                internal_inorder(output,root);
-                output<<"}"<<std::endl;
+                out<< "{ ";
+                internal_inorder(out,root);
+                out << "}"<<std::endl;
             }
 
         }
 
-        void print_cmd() const noexcept
-        {
-            if (size == 0) std::cout << "{}\n";
-            else if(size == -1) return;
-            else {
-                std::cout << "{";
-                internal_inorder_cmd(root);
-                std::cout << "\b\b}\n";
-            }
-        }
-
-        void print_all_tree(std::ofstream& out){
-            std::cout<<"Trees printed in .txt"<<std::endl;
+        void print_all_tree(std::ostream& out){
+            std::cout<<"Trees printed in outputstream"<<std::endl;
             for(var<T> page : getNodes()){
                 out<<"-->"<<page<<"<--"<<std::endl;
                 get(page).print_level(out,1,1,3);
                 out<<std::endl;
                 out<<std::endl;
-                std::cout<<"-->"<<page<<"<--"<<std::endl;
-                get(page).print_cmd();
-                std::cout<<std::endl;
-                std::cout<<std::endl;
-                std::cout<<std::endl;
+                out<<"-->"<<page<<"<--"<<std::endl;
+                get(page).print(out);
+                out<<std::endl;
+                out<<std::endl;
+                out<<std::endl;
             }
         }
 
         /* Function to print level order traversal a tree*/
-        void print_level(std::ofstream& output,int v_scale, int h_scale, int max_num_length)
+        void print_level(std::ostream& output,int v_scale, int h_scale, int max_num_length)
         {
             std::vector<std::vector<var<T>>> memory;
             int h = height_helper(root);
@@ -368,7 +375,7 @@ class AVL
             }
             stand_in += "]";
 
-            std::string min_whites;
+            std::string min_whites;// std::setw(min_whitespace);
             for(int i=0; i<min_whitespace; i++){
                 min_whites += " ";
             }
@@ -444,7 +451,7 @@ class AVL
         /*
         *Inorder Traversal of Internal AVL<T> tree
         */
-        void internal_inorder(std::ofstream& output,Node& _node)
+        void internal_inorder(std::ostream& output,Node& _node)
         {
            if(_node != nullptr)
            {
@@ -454,22 +461,14 @@ class AVL
            }
         }
 
-        void internal_inorder_cmd(const Node& _node) const noexcept
-        {
-            if (_node != nullptr) {
-                internal_inorder_cmd(_node->left);
-                std::cout << _node->unique_id << ", ";
-                internal_inorder_cmd(_node->right);
-            }
-        }
         //not working i think and if it does its against implementations logic
         //the user must stand responsible for his iterations on combined trees.
-        void print_inner(const Node& _node) const noexcept
+        void print_inner(std::ostream& output, const Node& _node) const noexcept
         {
             if (_node != nullptr) {
                 *(_node->self).print();
                 print(_node->left);
-                std::cout << _node->unique_id << ", ";
+                output << _node->unique_id << " ";
                 print(_node->right);
             }
         }
@@ -521,11 +520,13 @@ class AVL
             }
         }
 
-        void connected(Node& _node, AVL<var<T>>& memory
-               , std::vector<std::vector<var<T>>>& connected_components, AVL<T> avl)
+        void connected_inner(Node& _node, AVL<var<T>>& memory
+               , std::vector<std::vector<var<T>>>& connected_components, AVL<T>& avl)
        {
+
             if(_node != nullptr){
-                connected(_node->left, memory, connected_components, avl); //traverse to left of 1st avl
+            //std::cout<<"here"<<std::endl;
+                connected_inner(_node->left, memory, connected_components, avl); //traverse to left of 1st avl
                 if(!memory.contains(_node->unique_id)){ //if node hasnt been assigned to a component
 
                     std::vector<var<T>> comp; //start a new component
@@ -533,7 +534,6 @@ class AVL
                     memory.add(_node->unique_id); //write node to memory avl
                     int vec_size = comp.size();//save prev size
                     int cur_node_id = _node->unique_id;
-
                     do{ //repeat
                         connected_links(avl.get(cur_node_id).getRoot(),memory,comp); //traverse links of 2nd avl
                         cur_node_id = comp[vec_size-1]; //refresh new size of component
@@ -542,7 +542,7 @@ class AVL
 
                     connected_components.push_back(comp); // finally store component
                 }
-                connected(_node->right,memory, connected_components, avl); // traverse to right of 1st avl;
+                connected_inner(_node->right,memory, connected_components, avl); // traverse to right of 1st avl;
             }
         }
 

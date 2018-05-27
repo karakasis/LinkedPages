@@ -13,23 +13,19 @@ using namespace std;
 
 void Array::insertLink(int page, int link){
     cout<<"running: insertLink("<<page<<","<<link<<");"<<endl;
-    vector<int> ins;
-    ins.push_back(page);
-    ins.push_back(link);
-    insertions.push_back(ins);
     if(pairs.size()<=page){
         cout<<"page "<<page<<" was created"<<endl;
         makePair(page,link);
         cout<<"added link "<<link<<" in page "<<page<<endl;
     }else{
         if(!pairs.at(page).empty()){
-            std::vector<int> trimNode = findNeighbors(pairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(pairs[page],1,pairs[page].size()-1,link);
             if(posLink!=-1){
                 cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
 
             }else{
                 pairs[page].push_back(link);
+                //quickSort(pairs[page],1,pairs[page].size() - 1);
                 bubbleSort(pairs[page],pairs[page].size());
                 cout<<"added link "<<link<<" in page "<<page<<endl;
             }
@@ -43,19 +39,15 @@ void Array::insertLink(int page, int link){
 
 void Array::deleteLink(int page, int link){
     cout<<"running: deleteLink("<<page<<","<<link<<");"<<endl;
-    vector<int> del;
-    del.push_back(page);
-    del.push_back(link);
-    deletions.push_back(del);
     if(pairs.size() <= page){
         cout<<"page "<<page<<" not found"<<endl;
     }else{
        if(!pairs.at(page).empty()){
-            std::vector<int> trimNode = findNeighbors(pairs[page]);
-            int posLink = binarySearch(trimNode,0,trimNode.size()-1,link);
+            int posLink = binarySearch(pairs[page],1,pairs[page].size()-1,link);
             if(posLink!=-1){
                 pairs[page].erase(pairs[page].begin() + posLink + 1);
                 cout<<"deleted "<<link<<" from page "<<page<<endl;
+                //quickSort(pairs[page],1,pairs[page].size() - 1);
                 bubbleSort(pairs[page],pairs[page].size());
             }else{
                 cout<<"link "<<link<<" in page "<<page<<" not found"<<endl;
@@ -89,20 +81,24 @@ std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
 
 void Array::findNumConnectedComponents(){
     cout<<"running: findNumConnectedComponents();"<<endl;
+
     //trigger cloning
     cout<<"Cloning ..."<<endl;
-    if(!cloned)
-        cloned = new Array(*this);
-    cout<<"Updating clone ..."<<endl;
-    duplicateInstructions();
+    Array cloned(*this);
+    duplicateLinks(cloned);
+    cout<<"Finished cloning "<<endl;
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
-    //giati mporei na exei proigithei insert i delete
-    color = new int[cloned->pairs.size()];
-    for(int i =0;i<cloned->pairs.size();i=i+1){
+    //giati mporei na exei proigithei insert i delete    cout<<
+    cout<<cloned.pairs.size()<<endl;
+    cout<<pairs.size()<<endl;
+    color = new int[cloned.pairs.size()];
+
+    for(int i =0;i<cloned.pairs.size();i++){
         color[i]=1; //oloi oi komvoi white(arxikopoiisi)
     }
-    int cc=DFS();
+    int cc=DFS(cloned);
+    delete [] color;
     cout<<"Connected Components: "<<cc<<endl;
     cout<<endl;
 }
@@ -135,6 +131,8 @@ void Array::makePair(int page, int link){
 void Array::sortLinks(){
     cout<<"Sorting..."<<endl;
     for(int i=0;i<pairs.size();i=i+1){
+        //std::vector<int> trimNode = findNeighbors(pairs[page]);
+        //quickSort(findNeighbors(pairs[i]),0,pairs[i].size()-1);
         bubbleSort(pairs[i],pairs[i].size());
     }
 }
@@ -183,7 +181,34 @@ void Array::bubbleSort(vector<int> &arr, int n)
        // Last i elements are already in place
        for (j = 1; j < n-i; j++)
            if (arr[j] > arr[j+1])
-              swapCells(&arr[j], &arr[j+1]);
+                swap(arr[j], arr[j+1]);
+              //swapCells(&arr[j], &arr[j+1]);
+}
+
+void Array::quickSort(vector<int> &arr, int left, int right) {
+
+  int i = left, j = right;
+  int tmp;
+  int pivot = arr[(left + right) / 2];
+
+  /* partition */
+  while (i <= j) {
+    while (arr[i] < pivot)
+      i++;
+    while (arr[j] > pivot)
+      j--;
+    if (i <= j) {
+      swapCells(&arr[j], &arr[j+1]);
+      i++;
+      j--;
+    }
+  };
+
+  /* recursion */
+  if (left < j)
+    quickSort(arr, left, j);
+  if (i < right)
+    quickSort(arr, i, right);
 }
 
 void Array::swapCells(int *xp, int *yp)
@@ -196,11 +221,11 @@ void Array::swapCells(int *xp, int *yp)
 //colors: 1->White, 2->Gray, 3->Black
 //kathe fora pou ekteleitai vriskei mia sinektiki sinistwsa kai tin markarei
 //counter me arithmo ektelesis tis= arithmos S.S.
-int Array::DFS(){
+int Array::DFS(Array& cloned){
     int counter=0;
-    for(int j=0;j<cloned->pairs.size();j++){
-        if(color[j]==1 && cloned->pairs[j].size()!=0){
-            DFSvisit(j);
+    for(int j=0;j<cloned.pairs.size();j++){
+        if(color[j]==1 && cloned.pairs[j].size()!=0){
+            DFSvisit(j, cloned);
             counter=counter+1;
         }
     }
@@ -208,12 +233,14 @@ int Array::DFS(){
 }
 
 //Vriskei sindedemenous komvous tou u(emmesa kai amesa) kai tous markarei.
-void Array::DFSvisit(int u){
+void Array::DFSvisit(int u, Array& cloned){
     color[u]=2;
-    vector<int> neighbors = cloned->findNeighbors(cloned->pairs[u]); //paizei na einai kenos kai na exei thema
-    for(int k =0;k<neighbors.size();k=k+1){
+    //cout<<"here "<<endl;
+    vector<int> neighbors = cloned.findNeighbors(cloned.pairs[u]); //paizei na einai kenos kai na exei thema
+    //cout<<"here "<<endl;
+    for(int k =0;k<neighbors.size();k++){
         if(color[neighbors[k]]==1){
-            DFSvisit(neighbors[k]);
+            DFSvisit(neighbors[k],cloned);
         }
 
     }
