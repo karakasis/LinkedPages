@@ -12,65 +12,70 @@ using namespace std;
 //IO Functions
 
 void Array::insertLink(int page, int link){
-    cout<<"running: insertLink("<<page<<","<<link<<");"<<endl;
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+   out<<"running: insertLink("<<page<<","<<link<<");"<<endl;
     if(pairs.size()<=page){
-        cout<<"page "<<page<<" was created"<<endl;
-        makePair(page,link);
-        cout<<"added link "<<link<<" in page "<<page<<endl;
+        out<<"page "<<page<<" was created"<<endl;
+        createLink(page,link);
+        out<<"added link "<<link<<" in page "<<page<<endl;
     }else{
         if(!pairs.at(page).empty()){
             int posLink = binarySearch(pairs[page],1,pairs[page].size()-1,link);
             if(posLink!=-1){
-                cout<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
+                out<<"link "<<link<<" in page "<<page<<" already exists"<<endl;
 
             }else{
                 pairs[page].push_back(link);
                 //quickSort(pairs[page],1,pairs[page].size() - 1);
                 bubbleSort(pairs[page],pairs[page].size());
-                cout<<"added link "<<link<<" in page "<<page<<endl;
+                out<<"added link "<<link<<" in page "<<page<<endl;
             }
         }else{
-            cout<<"page "<<page<<" was created"<<endl;
-            makePair(page,link);
-            cout<<"added link "<<link<<" in page "<<page<<endl;
+            out<<"page "<<page<<" was created"<<endl;
+            createLink(page,link);
+            out<<"added link "<<link<<" in page "<<page<<endl;
         }
     }
 }
 
 void Array::deleteLink(int page, int link){
-    cout<<"running: deleteLink("<<page<<","<<link<<");"<<endl;
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: deleteLink("<<page<<","<<link<<");"<<endl;
     if(pairs.size() <= page){
-        cout<<"page "<<page<<" not found"<<endl;
+        out<<"page "<<page<<" not found"<<endl;
     }else{
        if(!pairs.at(page).empty()){
             int posLink = binarySearch(pairs[page],1,pairs[page].size()-1,link);
             if(posLink!=-1){
                 pairs[page].erase(pairs[page].begin() + posLink + 1);
-                cout<<"deleted "<<link<<" from page "<<page<<endl;
+                out<<"deleted "<<link<<" from page "<<page<<endl;
                 //quickSort(pairs[page],1,pairs[page].size() - 1);
                 bubbleSort(pairs[page],pairs[page].size());
             }else{
-                cout<<"link "<<link<<" in page "<<page<<" not found"<<endl;
+                out<<"link "<<link<<" in page "<<page<<" not found"<<endl;
             }
         }else{
-            cout<<"page "<<page<<" not found"<<endl;
+            out<<"page "<<page<<" not found"<<endl;
         }
     }
+
+    out<<endl;
 }
 
 void Array::findNeighbors(int page){
-    cout<<"running: findNeighbors("<<page<<");"<<endl;
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: findNeighbors("<<page<<");"<<endl;
     if(pairs.at(page).size()!=0){
-        cout<<"[ ";
+        out<<"[ ";
         for(int n : findNeighbors(pairs.at(page))){
-            cout<<n<<" ";
+            out<<n<<" ";
         }
-        cout<<"]"<<endl;
+        out<<"]"<<endl;
     }
     else
-        cout<<"page "<<page<<" not found"<<endl;
+        out<<"page "<<page<<" not found"<<endl;
 
-    cout<<endl;
+    out<<endl;
 }
 
 std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
@@ -80,13 +85,14 @@ std::vector<int> Array::findNeighbors(std::vector<int> neighbors){
 }
 
 void Array::findNumConnectedComponents(){
-    cout<<"running: findNumConnectedComponents();"<<endl;
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: findNumConnectedComponents();"<<endl;
 
     //trigger cloning
-    cout<<"Cloning ..."<<endl;
+    std::cout<<"Cloning ..."<<endl;
     Array cloned(*this);
     duplicateLinks(cloned);
-    cout<<"Finished cloning "<<endl;
+    std::cout<<"Finished cloning "<<endl;
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete    cout<<
@@ -99,13 +105,13 @@ void Array::findNumConnectedComponents(){
     }
     int cc=DFS(cloned);
     delete [] color;
-    cout<<"Connected Components: "<<cc<<endl;
-    cout<<endl;
+    out<<"Connected Components: "<<cc<<endl;
+    out<<endl;
 }
 
 //components
 
-void Array::makePair(int page, int link){
+void Array::createLink(int page, int link){
 
     if(pairs.size() <= page){ // then pairs doesnt include page
         allocationStep = page - pairs.size() + 1;

@@ -16,8 +16,7 @@ HashTableLinks::HashTableLinks()
 
 HashTableLinks::~HashTableLinks()
 {
-
-    delete[] table;
+    //delete[] table;
 }
 
 void HashTableLinks::setThreshold(float threshold)

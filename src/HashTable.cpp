@@ -28,40 +28,67 @@ HashTable::~HashTable()
     //dtor
 }
 
-void HashTable::insertLink(int key,int link){
+void HashTable::createLink(int key,int link){
     int hash = (key%tableSize);
-    //cerr<<"trying -> page: "<<key<<" link: "<<link<<" with hash: "<<hash<<endl;
     bool found = false;
     while(table[hash] != NULL)
     {   //if we loop then either hash is taken from something else or
         //hash is the same cause key is the same
-        //cout<<"old key .. "<<table[hash]->getKey()<<endl;
-        //cout<<"stuck pls help me"<<endl;
         if(table[hash]->getKey() == key){
             table[hash]->getLinks().put(link,link);
-            //cout<<"added_old -> page: "<<key<<" link: "<<link<<endl;
             found = true;
             break;
         }else if(table[hash] == HashTable::getDeletedEntry()){
-            table[hash] = new HashEntry(key,link);  //isws na xreiazetai &
-            //cout<<"added_deleted -> page: "<<key<<" link: "<<link<<endl;
+            table[hash] = new HashEntry(key,link);
             break;
         }
         hash = (hash+1)%tableSize; //and then try for 1 place below to find empty spot
-        //cout<<"update hash to "<<hash<<endl;
     }
     if(!found){
         table[hash] = new HashEntry(key,link);
-        //cout<<"added_new -> page: "<<key<<" link: "<<link<<endl;
         size = size+1;
     }
-    //cout<<size<<endl;
     if(size>=maxSize){
         resize();
     }
 }
 
+void HashTable::insertLink(int key,int link){
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: insertLink("<<key<<","<<link<<");"<<endl;
+    int hash = (key%tableSize);
+    bool found = false;
+    while(table[hash] != NULL)
+    {   //if we loop then either hash is taken from something else or
+        //hash is the same cause key is the same
+        if(table[hash]->getKey() == key){
+            table[hash]->getLinks().put(link,link);
+            out<<"added link "<<link<<" in page "<<key<<endl;
+            found = true;
+            break;
+        }else if(table[hash] == HashTable::getDeletedEntry()){
+            table[hash] = new HashEntry(key,link);
+            break;
+        }
+        hash = (hash+1)%tableSize; //and then try for 1 place below to find empty spot
+    }
+    if(!found){
+        out<<"page "<<key<<" was created"<<endl;
+        table[hash] = new HashEntry(key,link);
+        out<<"added link "<<link<<" in page "<<key<<endl;
+        size = size+1;
+    }
+    if(size>=maxSize){
+        resize();
+    }
+
+    out<<endl;
+}
+
 void HashTable::deleteLink(int key,int link){
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+
+    out<<"running: deleteLink("<<key<<","<<link<<");"<<endl;
     int hash = (key % tableSize);
     int initialHash = -1;
     while(hash != initialHash &&
@@ -75,30 +102,41 @@ void HashTable::deleteLink(int key,int link){
           }
     if (hash != initialHash && table[hash] != NULL){
         table[hash]->getLinks().remove(link);
+    }else{
+        out<<"link "<<link<<" in page "<<key<<" not found"<<endl;
     }
+
+    out<<endl;
 }
 
-HashTableLinks& HashTable::findNeighbors(int key){
+HashTableLinks HashTable::findNeighbors(int key){
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: findNeighbors("<<key<<");"<<endl;
     HashTableLinks tl = get(key);
     if(tl.size!=0){
-       cout<<"[ ";
+       out<<"[ ";
         for(int i=0; i<tl.getTableSize(); i++){
             if(tl.getAllLinks()[i] != NULL){
                 LinkedHashEntry *entry = tl.getAllLinks()[i];
-                cout<<entry->getKey()<<" ";
+                out<<entry->getKey()<<" ";
                 while (entry->getNext() != NULL){
                     entry = entry->getNext();
-                    cout<<entry->getKey()<<" ";
+                    out<<entry->getKey()<<" ";
                 }
             }
         }
-        cout<<"]"<<endl;
+        out<<"]"<<endl;
+    }else{
+        out<<"page "<<key<<" not found"<<endl;
     }
+
+    out<<endl;
     return tl;
 }
 
 void HashTable::findNumConnectedComponents(){
-    cout<<"running: findNumConnectedComponents();"<<endl;
+    std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+    out<<"running: findNumConnectedComponents();"<<endl;
 
     //trigger cloning
     cout<<"Cloning ..."<<endl;
@@ -108,8 +146,8 @@ void HashTable::findNumConnectedComponents(){
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete    cout<<
-    //cout<<cloned.pairs.size()<<endl;
-    //cout<<pairs.size()<<endl;
+    //cout<<cloned.size<<endl;
+    //cout<<size<<endl;
     color = new int[cloned.tableSize];
 
     for(int i =0;i<cloned.tableSize;i++){
@@ -117,8 +155,9 @@ void HashTable::findNumConnectedComponents(){
     }
     int cc=DFS(cloned);
     delete [] color;
-    cout<<"Connected Components: "<<cc<<endl;
-    cout<<endl;
+    out<<"Connected Components: "<<cc<<endl;
+
+    out<<endl;
 }
 
 void HashTable::setThreshold(float thold){
@@ -220,9 +259,7 @@ int HashTable::DFS(HashTable& cloned){
 //Vriskei sindedemenous komvous tou u(emmesa kai amesa) kai tous markarei.
 void HashTable::DFSvisit(int u, HashTable& cloned){
     color[u]=2;
-    //cout<<"here "<<endl;
-    HashTableLinks neighbors = cloned.findNeighbors(cloned.table[u]->getKey()); //paizei na einai kenos kai na exei thema
-    //cout<<"here "<<endl;
+    HashTableLinks neighbors = cloned.get(cloned.table[u]->getKey()); //paizei na einai kenos kai na exei thema
     for(int k = 0;k<neighbors.getTableSize();k++){
         if(neighbors.getAllLinks()[k] != NULL){
             LinkedHashEntry *entry = neighbors.getAllLinks()[k];

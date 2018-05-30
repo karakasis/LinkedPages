@@ -17,10 +17,9 @@ InputParser::~InputParser()
 
 void InputParser::startLoader(std::fstream& infile){
     int _length;
-    //std::fstream infile;
-    //infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
-    infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_v_small.txt",std::fstream::in|std::fstream::ate);
     infile.seekg(0,ios_base::end);
@@ -45,9 +44,8 @@ Array InputParser::readToArray(){
 
         if(infile.is_open()){
             while(infile >> c >> d){
-                //arr.insertPage(c);
-                //arr.insertLink(d);
-                arr.makePair(c,d);
+                arr.createLink(c,d);
+
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
                 p.update(_last);
@@ -58,36 +56,6 @@ Array InputParser::readToArray(){
             cout<<"File could not open properly"<<endl;
         }
         arr.sortLinks();
-        //  ~TEST~
-        std::cout<<endl;
-        //arr.show(arr.pairs);
-        //arr.show(arr.connectedPairs);
-        //std::cout<<arr.pairs.size()<<" "<<arr.connectedPairs.size()<<endl;
-    /*
-        arr.findNumConnectedComponents();
-
-        arr.deleteLink(0,3);
-        arr.deleteLink(0,0);
-        arr.deleteLink(7,3);
-
-        arr.findNumConnectedComponents();
-
-        arr.deleteLink(1,12);
-        arr.deleteLink(0,1);
-
-        arr.findNumConnectedComponents();
-
-        arr.insertLink(0,3);
-        arr.insertLink(12,0);
-        arr.insertLink(0,0);
-
-        arr.findNumConnectedComponents();
-
-        //arr.show(arr.pairs);
-        //arr.show(arr.connectedPairs);
-        //  ~TEST~
-*/
-        arr.printer();
         return arr;
 }
 
@@ -104,8 +72,6 @@ AVL<AVL<int>> InputParser::readToAVL(){
             while(infile >> c >> d){
 
                 avl.createLink(c,d);
-                //avl.add(c).add(d);
-                //avl.add(d).add(c);
 
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
@@ -116,14 +82,6 @@ AVL<AVL<int>> InputParser::readToAVL(){
         else{
             cout<<"File could not open properly"<<endl;
         }
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        std::ofstream out("test.txt", std::ofstream::out);
-        //avl.print_all_tree(out);
-        //avl.print_connected_cmd(avl);
-
-        out.close();
 
         return avl;
 }
@@ -139,8 +97,7 @@ HashTable InputParser::readToHashTable(){
 
         if(infile.is_open()){
             while(infile >> c >> d){
-
-                hashTable.insertLink(c,d);
+                hashTable.createLink(c,d);
 
                 _last = infile.tellg();
                 _last = sizeof(char) * _last * 0.001;
@@ -151,24 +108,5 @@ HashTable InputParser::readToHashTable(){
         else{
             cout<<"File could not open properly"<<endl;
         }
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        hashTable.findNumConnectedComponents();
-        hashTable.findNeighbors(0);
-        hashTable.deleteLink(0,1);
-        hashTable.deleteLink(0,2);
-        hashTable.deleteLink(0,3);
-        hashTable.findNeighbors(0);
-        hashTable.findNeighbors(1);
-        hashTable.findNeighbors(2);
-        hashTable.findNeighbors(3);
-        hashTable.findNeighbors(4);
-        //std::ofstream out("test.txt", std::ofstream::out);
-        //avl.print_all_tree(out);
-        //avl.print_connected_cmd(avl);
-
-        //out.close();
-
         return hashTable;
 }

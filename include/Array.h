@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <fstream>
 
 class Array
 {
@@ -14,7 +15,7 @@ class Array
         for(std::vector<int> row : pairs){
             if(row.size()!=0){ //< is this correct?
                 for(int i=1; i<row.size(); i++){
-                    cloned.makePair(row[i],row[0]);
+                    cloned.createLink(row[i],row[0]);
                 }
             }
         }
@@ -67,7 +68,7 @@ class Array
         void findNeighbors(int page);
         void findNumConnectedComponents();
 
-        void makePair(int linkPage, int link);
+        void createLink(int linkPage, int link);
         void show(std::vector<std::vector<int>> vec);
         void printer();
         void sortLinks();

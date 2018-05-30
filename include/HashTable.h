@@ -4,8 +4,11 @@
 #include "HashTableLinks.h"
 #include "HashEntry.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
+
+
 
 
 class HashTable
@@ -18,10 +21,10 @@ class HashTable
                 for(int j=0; j<tl.getTableSize();j++){
                     if(tl.getAllLinks()[j] != NULL){
                         LinkedHashEntry *entry = tl.getAllLinks()[j];
-                        cloned.insertLink(entry->getKey(),i);
+                        cloned.createLink(entry->getKey(),i);
                         while (entry->getNext() != NULL){
                             entry = entry->getNext();
-                            cloned.insertLink(entry->getKey(),i);
+                            cloned.createLink(entry->getKey(),i);
                         }
                     }
                 }
@@ -34,9 +37,19 @@ class HashTable
         //-> ref to: https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom/3279550#3279550 : for copy-swap idiom
         //copy constructor
         HashTable(const HashTable& other)
-        : table{other.table}, size{other.size}, maxSize{other.maxSize},
+        : size{other.size}, maxSize{other.maxSize},
             tableSize{other.tableSize}, threshold{other.threshold}
-            {}
+        {
+            table = new HashEntry*[tableSize];
+            for(int i=0; i<tableSize; i++){
+                this->table[i] = NULL;
+            }
+            for(int i=0; i<tableSize; i++){
+                if(other.table[i]!=NULL && other.table[i]!=HashTable::getDeletedEntry()){
+                    put(other.table[i]->getPage(),other.table[i]->getLinks());
+                }
+            }
+        }
 
         //move constructor c++11
          HashTable(HashTable&& other) noexcept
@@ -62,9 +75,10 @@ class HashTable
 
         HashTable();
         ~HashTable();
+        void createLink(int page,int link);
         void insertLink(int page,int link);
         void deleteLink(int page,int link);
-        HashTableLinks& findNeighbors(int key);
+        HashTableLinks findNeighbors(int key);
         void findNumConnectedComponents();
         void remove(int page);
 

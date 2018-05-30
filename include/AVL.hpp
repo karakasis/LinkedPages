@@ -59,27 +59,6 @@ class AVL
     bool data_found;
     T dummy;
 
-    /* used different method.
-    // Cloning for components variables
-    AVL<T> *cloned;
-    std::vector<std::vector<var<T>>> insertions; //this 2d vectoring is enforced since con. components
-    std::vector<std::vector<var<T>>> deletions; //only works for 2d AVL in the 1st place... also inner avl will carry this but it wont use it or fill it
-
-    void duplicateInstructions(AVL<T>& avl){
-
-        for(std::vector<int> pairs : insertions){
-            avl.cloned->insertLink(pairs[0],pairs[1]);
-            avl.cloned->insertLink(pairs[1],pairs[0]);
-        }
-        for(std::vector<int> pairs : deletions){
-            avl.cloned->deleteLink(pairs[0],pairs[1]);
-            avl.cloned->deleteLink(pairs[1],pairs[0]);
-        }
-        avl.insertions.clear();
-        avl.deletions.clear();
-    }
-    */
-
     //this will only get called during cloning
     void duplicateLinks(Node& _node , AVL<T>& avl){ // _node is root of normal tree, avl is cloned tree
         if(_node!=nullptr){
@@ -174,46 +153,28 @@ class AVL
 
             swap(src.root, oper.root);
             swap(src.size, oper.size);
-            /*
-            swap(src.cloned, oper.cloned);
-            swap(src.insertions, oper.insertions);
-            swap(src.deletions, oper.deletions);*/
         }
 
         void insertLink(var<T> in, var<T> that)
         {
-            std::cout<<"running: insertLink("<<in<<","<<that<<");"<<std::endl;
+            std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+            out<<"running: insertLink("<<in<<","<<that<<");"<<std::endl;
+            out<<std::endl;
             //this is missing the ability to insert a page if it doesnt exist.
-            /*
-            std::vector<var<T>> ins;
-            ins.push_back(in);
-            ins.push_back(that);
-            insertions.push_back(ins);
-            */
             get(in).add(that);
         }
 
         void createLink(var<T> in, var<T> that)
         {
             //this HAS the ability to insert a page if it doesnt exist.
-            /*
-            std::vector<var<T>> ins;
-            ins.push_back(in);
-            ins.push_back(that);
-            insertions.push_back(ins);
-            */
             add(in).add(that);
         }
 
         void deleteLink(var<T> from, var<T> that)
         {
-            std::cout<<"running: deleteLink("<<from<<","<<that<<");"<<std::endl;
-            /*
-            std::vector<var<T>> del;
-            del.push_back(from);
-            del.push_back(that);
-            deletions.push_back(del);
-            */
+            std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+            out<<"running: deleteLink("<<from<<","<<that<<");"<<std::endl;
+            out<<std::endl;
             get(from).remove(that);
         }
 
@@ -268,7 +229,8 @@ class AVL
         @param AVL must be a nested structure of type AVL < AVL < type > >.
         */
         std::vector<std::vector<var<T>>> connected(){
-            std::cout<<"running: findNumConnectedComponents();"<<std::endl;
+            std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+            out<<"running: findNumConnectedComponents();"<<std::endl;
             std::cout<<"Cloning ..."<<std::endl;
             AVL<T> clone(*this);
             duplicateLinks(root, clone);
@@ -289,20 +251,21 @@ class AVL
         @return a vector of var<T> with all neighbor-nodes.
         */
         std::vector<var<T>>& findNeighbors(var<T> id){
-            std::cout<<"running: findNeighbors("<<id<<");"<<std::endl;
+            std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
+            out<<"running: findNeighbors("<<id<<");"<<std::endl;
             std::vector<var<T>> neig;
             T found = get(id);
             if(found.getSize() == -1){
-                std::cout<<"page "<<id<<" doesn't exist."<<std::endl;
+                out<<"page "<<id<<" doesn't exist."<<std::endl;
             }else{
                 findNeighbors(neig, found.getRoot());
             }
-            std::cout<<"[ ";
+            out<<"[ ";
             for(var<T> sibl : neig){
-                std::cout<<sibl<<" ";
+                out<<sibl<<" ";
             }
-            std::cout<<"]"<<std::endl;
-            std::cout<<std::endl;
+            out<<"]"<<std::endl;
+            out<<std::endl;
             return neig;
         }
 
@@ -316,12 +279,13 @@ class AVL
 
         //PRINTER functions////
 
-        void connected(AVL<T>& avl, std::ostream& out){
+        void connected(AVL<T>& avl){
+            std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
             std::vector<std::vector<var<T>>> connected_components = connected();
             int size_con_comp = connected_components.size();
-            out<<"Size of connected_components: "<<size_con_comp<<std::endl;
+            out<<"Connected Components: "<<size_con_comp<<std::endl;
             for(int i=0; i<size_con_comp; i++){
-                out<<"COMP["<<i<<"]"<<std::endl;
+                out<<"cmp.["<<i<<"]"<<std::endl;
                 if(connected_components.at(i).size()<=100){
                     out<<"[ ";
                     for(int id : connected_components.at(i)){

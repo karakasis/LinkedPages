@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 
+
 using namespace std;
 
 Controller::~Controller()
@@ -62,20 +63,6 @@ void Controller::readCommands(){
 }
 
 void Controller::executeCommand(stringstream& ss){
-    /*
-    InputParser parser;
-    arr = parser.readToArray();
-    avl = parser.readToAVL();
-
-    arr.findNumConnectedComponents();
-    arr.deleteLink(0,5);
-    avl.print_connected_cmd();
-    avl.get(0).remove(5);
-    arr.findNumConnectedComponents();
-    avl.print_connected_cmd();
-    //cout<<"Cloning AVL.."<<endl;
-    //AVL<AVL<int>> clone(avl);
-*/
 
     vector<int> ints;  //container to store ints
     vector<string> strings;  //container to store strings
@@ -94,13 +81,11 @@ void Controller::executeCommand(stringstream& ss){
                 case Commands::InsertLink :
                 {
                     arr.insertLink(ints.at(0),ints.at(1));
-                    arr.findNeighbors(ints.at(0));
                    break;
                 }
                 case Commands::DeleteLink :
                 {
                     arr.deleteLink(ints.at(0),ints.at(1));
-                    arr.findNeighbors(ints.at(0));
                    break;
                 }
                 case Commands::FindNeighbors :
@@ -114,7 +99,7 @@ void Controller::executeCommand(stringstream& ss){
                    break;
                 }
                 default:
-                    cout<<"Invalid user input.";
+                    cout<<"Invalid command.";
                 }
     else if(argSwitch == 2)
             switch(cmd){
@@ -126,7 +111,7 @@ void Controller::executeCommand(stringstream& ss){
                 }
                 case Commands::InsertLink :
                 {
-                    avl.createLink(ints.at(0),ints.at(1));
+                    avl.insertLink(ints.at(0),ints.at(1));
                    break;
                 }
                 case Commands::DeleteLink :
@@ -137,24 +122,52 @@ void Controller::executeCommand(stringstream& ss){
                 case Commands::FindNeighbors :
                 {
                     avl.findNeighbors(ints.at(0));
-                    //cout<<"under development"<<endl;
                    break;
                 }
                 case Commands::FindNumConnectedComponents :
                 {
-                    ofstream out("test.txt", ofstream::out);
                     //avl.print_all_tree(out,avl); //< this will print the normal tress
-                    avl.connected(avl,cout);
+                    avl.connected(avl);
                    break;
                 }
                 default:
-                    cout<<"Invalid user input.";
+                    cout<<"Invalid command.";
 
                 }
     else if(argSwitch == 3)
-        {cout<<"hashtable--"<<endl; InputParser parser; hashTable = parser.readToHashTable();}
+        switch(cmd){
+            case Commands::ReadData :
+            {
+                InputParser parser;
+                hashTable = parser.readToHashTable();
+               break;
+            }
+            case Commands::InsertLink :
+            {
+                hashTable.insertLink(ints.at(0),ints.at(1));
+               break;
+            }
+            case Commands::DeleteLink :
+            {
+                hashTable.deleteLink(ints.at(0),ints.at(1));
+               break;
+            }
+            case Commands::FindNeighbors :
+            {
+                hashTable.findNeighbors(ints.at(0));
+               break;
+            }
+            case Commands::FindNumConnectedComponents :
+            {
+                hashTable.findNumConnectedComponents();
+               break;
+            }
+            default:
+                    cout<<"Invalid command.";
+
+            }
     else
-        cout<<"Invalid user input.";
+        cout<<"Invalid Argument.";
 
 }
 
@@ -166,40 +179,26 @@ vector<string> Controller::split(const char* str, vector<int> &ints, vector<stri
     char tab = '\t';
     int i =0;
 
-        const char *begin = str;
+    const char *begin = str;
 
-        while( (*str != space && *str!= tab ) && *str){//look for string command
-           str++;
-        }
-        strings.push_back(string(begin, str));
-        //cout<<"["<<strings[0]<<"]";
+    while( (*str != space && *str!= tab ) && *str){//look for string command
+       str++;
+    }
+    strings.push_back(string(begin, str));
 
-        str++;
-        const char *begin2 = str;
-        while( (*str != space && *str!= tab ) && *str){//look for int
-           str++;
-        }
-        ints.push_back(atoi(string(begin2,str).c_str()));
-        //cout<<" ["<<ints[0]<<"]";
+    str++;
+    const char *begin2 = str;
+    while( (*str != space && *str!= tab ) && *str){//look for int
+       str++;
+    }
+    ints.push_back(atoi(string(begin2,str).c_str()));
 
-        str++;
-        const char *begin3 = str;
-        while( (*str != space && *str!= tab ) && *str){//look for int
-           str++;
-        }
-        ints.push_back(atoi(string(begin3,str).c_str()));
-        //cout<<" ["<<ints[1]<<"]";
-
-        /*
-        istringstream is( test );
-        int n;
-        while( is >> n ) {
-             // do something with n
-             ints.push_back(n);
-        }
-*/
-
-
+    str++;
+    const char *begin3 = str;
+    while( (*str != space && *str!= tab ) && *str){//look for int
+       str++;
+    }
+    ints.push_back(atoi(string(begin3,str).c_str()));
 
     return result;
 
