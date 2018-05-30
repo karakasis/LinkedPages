@@ -7,20 +7,26 @@
 
 using namespace std;
 
-HashEntry::HashEntry(int page,HashTableLinks table)
+HashEntry::HashEntry(int page,HashTableLinks& links)
 {
     this->page=page;
-    links = table;
+    key = page;
+    this->links = links;
 }
 
-/*
-HashEntry::HashEntry(int key,int page,int foo)
+HashEntry::HashEntry(int page,int link)
 {
     this->page=page;
-    this->key=key;
-    links=NULL;
+    key = page;
+    links.put(link,link);
 }
-*/
+
+HashEntry::HashEntry(int deleted)
+{
+    this->page = deleted; //deleted entry constructor
+    HashTableLinks deleted_links;
+    links = deleted_links; //?_?
+}
 
 HashEntry::~HashEntry()
 {
@@ -33,6 +39,10 @@ int HashEntry::getPage(){
 
 int HashEntry::getKey(){
     return key;
+}
+
+HashTableLinks HashEntry::reseatLinks(){
+    return links;
 }
 
 HashTableLinks& HashEntry::getLinks(){

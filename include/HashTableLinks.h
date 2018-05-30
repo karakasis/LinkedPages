@@ -16,7 +16,9 @@ class HashTableLinks
         void put(int key, int value);
         void remove(int key);
         void setThreshold(float threshold);
-
+        int getTableSize();
+        int size;
+        LinkedHashEntry ** getAllLinks();
 
     protected:
 
@@ -24,7 +26,6 @@ class HashTableLinks
         float threshold;
         int maxSize;
         int tableSize;
-        int size;
         LinkedHashEntry **table;
         void resize();
 };

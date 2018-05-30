@@ -27,9 +27,8 @@ void LinkedHashEntry::setValue(int value) {
     this->value = value;
 }
 
-LinkedHashEntry LinkedHashEntry::*getNext() {
+LinkedHashEntry* LinkedHashEntry::getNext() {
     return next;
-
 }
 
 void LinkedHashEntry::setNext(LinkedHashEntry *next) {

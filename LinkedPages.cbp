@@ -39,7 +39,6 @@
 		<Unit filename="include/AVL.hpp" />
 		<Unit filename="include/Array.h" />
 		<Unit filename="include/Controller.h" />
-		<Unit filename="include/DeletedEntry.h" />
 		<Unit filename="include/HashEntry.h" />
 		<Unit filename="include/HashTable.h" />
 		<Unit filename="include/HashTableLinks.h" />
@@ -49,7 +48,6 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Array.cpp" />
 		<Unit filename="src/Controller.cpp" />
-		<Unit filename="src/DeletedEntry.cpp" />
 		<Unit filename="src/HashEntry.cpp" />
 		<Unit filename="src/HashTable.cpp" />
 		<Unit filename="src/HashTableLinks.cpp" />

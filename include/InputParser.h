@@ -9,6 +9,7 @@
 #include "ezRateProgressBar.hpp"
 #include "Array.h"
 #include "AVL.hpp"
+#include "HashTable.h"
 
 
 class InputParser
@@ -21,6 +22,7 @@ class InputParser
 
         Array readToArray();
         AVL<AVL<int>> readToAVL();
+        HashTable readToHashTable();
 
     protected:
 

@@ -152,7 +152,7 @@ void Controller::executeCommand(stringstream& ss){
 
                 }
     else if(argSwitch == 3)
-        cout<<"hashtable--"<<endl;
+        {cout<<"hashtable--"<<endl; InputParser parser; hashTable = parser.readToHashTable();}
     else
         cout<<"Invalid user input.";
 

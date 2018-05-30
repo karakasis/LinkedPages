@@ -10,14 +10,15 @@ class HashEntry
 {
     public:
         //Constructor for hashtable
-        HashEntry(int page,HashTableLinks table);
-        //Constructor for hashtablelinks
-        //key=page
-        //HashEntry(int key,int page,int foo);
+        HashEntry(int page,HashTableLinks& table);
+        HashEntry(int page,int link);
+        HashEntry(int deleted);
         ~HashEntry();
+
         int getPage();
         int getKey();
-        HashTableLinks getLinks();
+        HashTableLinks reseatLinks();
+        HashTableLinks& getLinks();
         void setLinks(HashTableLinks links);
 
     protected:
@@ -26,7 +27,6 @@ class HashEntry
         int page;
         int key;
         HashTableLinks links;
-
 };
 
 #endif // HASHENTRY_H

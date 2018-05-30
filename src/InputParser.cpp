@@ -1,8 +1,4 @@
 #include "InputParser.h"
-#include "Array.h"
-#include "AVL.hpp"
-#include "ezRateProgressBar.hpp"
-
 #include <fstream>
 #include <iostream>
 
@@ -94,6 +90,7 @@ Array InputParser::readToArray(){
         arr.printer();
         return arr;
 }
+
 AVL<AVL<int>> InputParser::readToAVL(){
 
         AVL<AVL<int>> avl;
@@ -129,4 +126,49 @@ AVL<AVL<int>> InputParser::readToAVL(){
         out.close();
 
         return avl;
+}
+
+HashTable InputParser::readToHashTable(){
+
+        HashTable hashTable;
+        int _last;
+
+        std::fstream infile;
+        startLoader(infile);
+
+
+        if(infile.is_open()){
+            while(infile >> c >> d){
+
+                hashTable.insertLink(c,d);
+
+                _last = infile.tellg();
+                _last = sizeof(char) * _last * 0.001;
+                p.update(_last);
+            }
+
+        }
+        else{
+            cout<<"File could not open properly"<<endl;
+        }
+        cout<<endl;
+        cout<<endl;
+        cout<<endl;
+        hashTable.findNumConnectedComponents();
+        hashTable.findNeighbors(0);
+        hashTable.deleteLink(0,1);
+        hashTable.deleteLink(0,2);
+        hashTable.deleteLink(0,3);
+        hashTable.findNeighbors(0);
+        hashTable.findNeighbors(1);
+        hashTable.findNeighbors(2);
+        hashTable.findNeighbors(3);
+        hashTable.findNeighbors(4);
+        //std::ofstream out("test.txt", std::ofstream::out);
+        //avl.print_all_tree(out);
+        //avl.print_connected_cmd(avl);
+
+        //out.close();
+
+        return hashTable;
 }

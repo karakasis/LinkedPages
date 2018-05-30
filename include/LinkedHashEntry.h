@@ -7,10 +7,11 @@ class LinkedHashEntry
     public:
         LinkedHashEntry(int key, int value);
         ~LinkedHashEntry();
+
         int getKey();
         int getValue();
         void setValue(int value);
-        LinkedHashEntry *getNext();
+        LinkedHashEntry* getNext();
         void setNext(LinkedHashEntry *next);
 
     protected:
