@@ -6,8 +6,8 @@ using namespace std;
 HashTableLinks::HashTableLinks()
 {
     threshold = 0.75f;
-    maxSize = 96;
-    tableSize = 128;
+    maxSize = 36;
+    tableSize = 48;
     size = 0;
     table = new LinkedHashEntry*[tableSize];
     for (int i = 0; i < tableSize; i++)

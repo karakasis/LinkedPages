@@ -5,6 +5,7 @@
 #include "HashEntry.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -96,6 +97,7 @@ class HashTable
         int *color;
         int DFS(HashTable& cloned);
         void DFSvisit(int u, HashTable& cloned);
+        void bubbleSort(std::vector<int>& sorted, int sizes);
 
         static HashEntry *deleted_entry;
 

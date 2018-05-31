@@ -69,7 +69,6 @@ class Array
         void show(std::vector<std::vector<int>> vec);
         void printer();
         void sortLinks();
-        void sortConnectedLinks();
 
     protected:
 

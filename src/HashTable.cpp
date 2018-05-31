@@ -116,17 +116,25 @@ HashTableLinks HashTable::findNeighbors(int key){
     std::ofstream out("output.txt", std::ofstream::out | std::ofstream::app);
     out<<"running: findNeighbors("<<key<<");"<<endl;
     HashTableLinks tl = get(key);
+    std::vector<int> sortthem;
     if(tl.size!=0){
-       out<<"[ ";
         for(int i=0; i<tl.getTableSize(); i++){
             if(tl.getAllLinks()[i] != NULL){
                 LinkedHashEntry *entry = tl.getAllLinks()[i];
                 out<<entry->getKey()<<" ";
+                sortthem.push_back(entry->getKey());
                 while (entry->getNext() != NULL){
                     entry = entry->getNext();
                     out<<entry->getKey()<<" ";
+                    sortthem.push_back(entry->getKey());
                 }
             }
+        }
+out<<endl;
+        bubbleSort(sortthem,sortthem.size());
+        out<<"[ ";
+        for(int sib : sortthem){
+            out<<sib<<" ";
         }
         out<<"]"<<endl;
     }else{
@@ -135,6 +143,17 @@ HashTableLinks HashTable::findNeighbors(int key){
 
     out<<endl;
     return tl;
+}
+
+void HashTable::bubbleSort(vector<int> &arr, int n)
+{
+   int i, j;
+   for (i = 0; i < n - 1; i++)
+
+       // Last i elements are already in place
+       for (j = 0; j < n - i - 1; j++)
+           if (arr[j] > arr[j+1])
+                swap(arr[j], arr[j+1]);
 }
 
 void HashTable::findNumConnectedComponents(){
