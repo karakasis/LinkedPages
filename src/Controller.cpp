@@ -86,6 +86,7 @@ void Controller::executeCommand(stringstream& ss){
                 case Commands::DeleteLink :
                 {
                     arr.deleteLink(ints.at(0),ints.at(1));
+                    arr.deleteLink(ints.at(1),ints.at(0));
                    break;
                 }
                 case Commands::FindNeighbors :
@@ -117,6 +118,7 @@ void Controller::executeCommand(stringstream& ss){
                 case Commands::DeleteLink :
                 {
                     avl.deleteLink(ints.at(0),ints.at(1));
+                    avl.deleteLink(ints.at(1),ints.at(0));
                    break;
                 }
                 case Commands::FindNeighbors :
@@ -150,6 +152,7 @@ void Controller::executeCommand(stringstream& ss){
             case Commands::DeleteLink :
             {
                 hashTable.deleteLink(ints.at(0),ints.at(1));
+                hashTable.deleteLink(ints.at(1),ints.at(0));
                break;
             }
             case Commands::FindNeighbors :
