@@ -146,7 +146,7 @@ void HashTable::findNumConnectedComponents(){
     HashTable cloned(*this);
     //cloned = new HashTable(*this);
     duplicateLinks(cloned);
-    cout<<"Finished cloning "<<endl;
+    std::cout<<"Finding connected components ... "<<std::endl;
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete    cout<<

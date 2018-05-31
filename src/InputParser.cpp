@@ -17,8 +17,8 @@ InputParser::~InputParser()
 
 void InputParser::startLoader(std::fstream& infile){
     int _length;
-    //infile.open("input.txt",std::fstream::in|std::fstream::ate);
-    infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_medium.txt",std::fstream::in|std::fstream::ate);
@@ -28,9 +28,21 @@ void InputParser::startLoader(std::fstream& infile){
     _length = sizeof(char) * _length * 0.001;
     //cout<<_length<<endl;
     infile.seekg(0, ios_base::beg);
+
+    if(infile.is_open()){
+            cout<<endl;
+        cout<<"Building structure from input ..."<<endl;
+            cout<<endl;
+    }else{
+        cout<<"File could not open properly"<<endl;
+        exit(-1);
+    }
+
     p.n = _length;
     p.units = "KB";
     p.start();
+
+
 }
 
 
@@ -53,9 +65,7 @@ Array InputParser::readToArray(){
             }
 
         }
-        else{
-            cout<<"File could not open properly"<<endl;
-        }
+        cout<<endl;
         arr.sortLinks();
         return arr;
 }
@@ -80,9 +90,7 @@ AVL<AVL<int>> InputParser::readToAVL(){
             }
 
         }
-        else{
-            cout<<"File could not open properly"<<endl;
-        }
+        cout<<endl;
 
         return avl;
 }
@@ -106,8 +114,7 @@ HashTable InputParser::readToHashTable(){
             }
 
         }
-        else{
-            cout<<"File could not open properly"<<endl;
-        }
+        cout<<endl;
+
         return hashTable;
 }

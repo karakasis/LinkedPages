@@ -57,9 +57,6 @@ class Array
 
             swap(src.pairs, oper.pairs);
             swap(src.allocationStep, oper.allocationStep);
-            //swap(src.cloned, oper.cloned);
-            //swap(src.insertions, oper.insertions);
-            //swap(src.deletions, oper.deletions);
         }
 
         int allocationStep;
@@ -74,12 +71,10 @@ class Array
         void sortLinks();
         void sortConnectedLinks();
 
-        //put those in private b4 sending
-        std::vector< std::vector<int> > pairs;
-
     protected:
 
     private:
+        std::vector< std::vector<int> > pairs;
         std::vector<int> findNeighbors(std::vector<int> linkedPages);
         void reAllocVector();
 

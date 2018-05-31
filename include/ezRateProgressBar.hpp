@@ -154,11 +154,15 @@ public:
 
   void update(T newvalue) {
     // Nothing to update if already maxed out.
-    if (done) return;
+    if (done) {
+        return;
+    }
     endTime = osQueryPerfomance();
 
     // Abort if at least 1 second didn't elapse, unless newvalue will get us to 100%.
-    if ( ((endTime-prevTime)/1000000.0 < 0.01) && (newvalue < n) ) return;
+    if ( ((endTime-prevTime)/1000000.0 < 0.01) && (newvalue < n) ){
+        return;
+    }
     prevTime = endTime;
     float dt = (endTime-startTime)/1000000.0;
     //if (dt < 1) return; // Was meant to avoid division by zero when time was in whole numbers.
@@ -176,6 +180,14 @@ public:
     out.append(tstr);
     int pad, newwidth;
     if (Pct >= 1.0) {
+            std::string out;
+            out.reserve(80);
+            out.append("100%");
+            // Seconds.
+            std::string tstr;
+            out.append(" | ");
+            secondsToString( (unsigned int)dt, tstr);
+            out.append(tstr);
       // Print overall time and newline.
       out.append(" |  00:00:00 | ");
       commaNumber(n, tstr);

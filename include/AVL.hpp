@@ -231,7 +231,7 @@ class AVL
             std::cout<<"Cloning ..."<<std::endl;
             AVL<T> clone(*this);
             duplicateLinks(root, clone);
-            std::cout<<"Finished cloning "<<std::endl;
+            std::cout<<"Finding connected components ... "<<std::endl;
             //duplicateInstructions(clone);
 
             AVL<var<T>> memory; //memory inside an AVL to skip traversed nodes
@@ -284,14 +284,14 @@ class AVL
             for(int i=0; i<size_con_comp; i++){
                 out<<"cmp.["<<i<<"]"<<std::endl;
                 if(connected_components.at(i).size()<=100){
-                    out<<"[ ";
+                    out<<"\t[ ";
                     for(int id : connected_components.at(i)){
                         out<<id<<" ";
                     }
                     out<<"]";
                 }
                 else
-                    out<<"Component's size is bigger than 100. Print skipped.";
+                    out<<"\t Component's size is bigger than 100. Print skipped."<<std::endl;
                 out<<std::endl;
             }
         }

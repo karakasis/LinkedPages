@@ -36,6 +36,7 @@ void Array::insertLink(int page, int link){
             out<<"added link "<<link<<" in page "<<page<<endl;
         }
     }
+    out<<endl;
 }
 
 void Array::deleteLink(int page, int link){
@@ -92,7 +93,7 @@ void Array::findNumConnectedComponents(){
     std::cout<<"Cloning ..."<<endl;
     Array cloned(*this);
     duplicateLinks(cloned);
-    std::cout<<"Finished cloning "<<endl;
+    std::cout<<"Finding connected components ... "<<std::endl;
 
     //edw prepei na ginete kathe fora arxikopoiisi tou color me to plithos twn pages
     //giati mporei na exei proigithei insert i delete    cout<<
