@@ -13,7 +13,6 @@ class HashEntry
         HashEntry(int page,HashTableLinks& table);
         HashEntry(int page,int link);
         HashEntry(int deleted);
-        ~HashEntry();
 
         int getPage();
         int getKey();

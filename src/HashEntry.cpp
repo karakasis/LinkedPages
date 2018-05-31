@@ -11,7 +11,16 @@ HashEntry::HashEntry(int page,HashTableLinks& links)
 {
     this->page=page;
     key = page;
-    this->links = links;
+    LinkedHashEntry *entry;
+    for(int j=0; j<links.getTableSize();j++){
+        if(links.getAllLinks()[j] != NULL){
+            LinkedHashEntry *entry = links.getAllLinks()[j];
+            while (entry != NULL){
+                this->links.put(entry->getKey(),entry->getValue());
+                entry = entry->getNext();
+            }
+        }
+    }
 }
 
 HashEntry::HashEntry(int page,int link)
@@ -26,11 +35,6 @@ HashEntry::HashEntry(int deleted)
     this->page = deleted; //deleted entry constructor
     HashTableLinks deleted_links;
     links = deleted_links; //?_?
-}
-
-HashEntry::~HashEntry()
-{
-    //dtor
 }
 
 int HashEntry::getPage(){

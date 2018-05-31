@@ -25,7 +25,10 @@ HashTable::HashTable(){
 
 HashTable::~HashTable()
 {
-    //dtor
+    for (int i = 0; i < tableSize; i++)
+      if (table[i] != NULL && table[i] != HashTable::getDeletedEntry())
+            delete table[i];
+    delete[] table;
 }
 
 void HashTable::createLink(int key,int link){
@@ -141,6 +144,7 @@ void HashTable::findNumConnectedComponents(){
     //trigger cloning
     cout<<"Cloning ..."<<endl;
     HashTable cloned(*this);
+    //cloned = new HashTable(*this);
     duplicateLinks(cloned);
     cout<<"Finished cloning "<<endl;
 
@@ -158,6 +162,7 @@ void HashTable::findNumConnectedComponents(){
     out<<"Connected Components: "<<cc<<endl;
 
     out<<endl;
+    //delete cloned;
 }
 
 void HashTable::setThreshold(float thold){

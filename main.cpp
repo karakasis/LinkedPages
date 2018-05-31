@@ -10,8 +10,8 @@ int main(int argc, char* argv[])
     out<<"";
     if(argc != 2){
         cerr << "Usage: " << argv[0] << " requires 1 argument (1,2 or 3)" <<endl;
-        cerr << "Running default argument instead : 1"<<endl;
-        Controller(1);
+        cerr << "Running default argument instead : "<<3<<endl;
+        Controller(3);
     }else{
         cout << "Running: " << argv[0] << " with argument -"<<argv[1]<<endl;
         Controller(atoi(argv[1]));

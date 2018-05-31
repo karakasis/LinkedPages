@@ -1,0 +1,8 @@
+running: deleteLink(3,4);
+
+running: deleteLink(4,3);
+
+running: insertLink(1,2);
+added link 2 in page 1
+
+running: findNumConnectedComponents();

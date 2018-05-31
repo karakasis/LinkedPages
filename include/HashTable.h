@@ -21,10 +21,10 @@ class HashTable
                 for(int j=0; j<tl.getTableSize();j++){
                     if(tl.getAllLinks()[j] != NULL){
                         LinkedHashEntry *entry = tl.getAllLinks()[j];
-                        cloned.createLink(entry->getKey(),i);
+                        cloned.createLink(entry->getKey(),table[i]->getPage());
                         while (entry->getNext() != NULL){
                             entry = entry->getNext();
-                            cloned.createLink(entry->getKey(),i);
+                            cloned.createLink(entry->getKey(),table[i]->getPage());
                         }
                     }
                 }
@@ -37,14 +37,9 @@ class HashTable
         //-> ref to: https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom/3279550#3279550 : for copy-swap idiom
         //copy constructor
         HashTable(const HashTable& other)
-        : size{other.size}, maxSize{other.maxSize},
-            tableSize{other.tableSize}, threshold{other.threshold}
+        : HashTable() // initialize via default constructor, C++11 only
         {
-            table = new HashEntry*[tableSize];
-            for(int i=0; i<tableSize; i++){
-                this->table[i] = NULL;
-            }
-            for(int i=0; i<tableSize; i++){
+            for(int i=0; i<other.tableSize; i++){
                 if(other.table[i]!=NULL && other.table[i]!=HashTable::getDeletedEntry()){
                     put(other.table[i]->getPage(),other.table[i]->getLinks());
                 }

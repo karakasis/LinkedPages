@@ -15,8 +15,19 @@ HashTableLinks::HashTableLinks()
 }
 
 HashTableLinks::~HashTableLinks()
-{
-    //delete[] table;
+{/*
+    for (int i = 0; i < tableSize; i++)
+      if (table[i] != NULL) {
+            LinkedHashEntry *temp = NULL;
+            LinkedHashEntry *entry = table[i];
+            while (entry != NULL)
+            {
+                temp = entry->getNext();
+                delete entry;
+                entry = temp;
+            }
+      }
+     delete[] table;*/
 }
 
 void HashTableLinks::setThreshold(float threshold)
@@ -59,16 +70,18 @@ void HashTableLinks::put(int key, int value)
     {
         //cout<<"occupied"<<endl;
         LinkedHashEntry *entry = table[hash];
-        while (entry->getNext() != NULL)
+        while (entry->getNext() != NULL){
             entry = entry->getNext();
-        if (entry->getKey() == key)
-            entry->setValue(value);
-        else
-        {
+            if (entry->getKey() == key){
+                entry->setValue(value);
+                break;
+            }
+
+        }
+        if (entry->getKey() != key){
             entry->setNext(new LinkedHashEntry(key, value));
             size++;
         }
-
     }
     if (size >= maxSize)
         resize();

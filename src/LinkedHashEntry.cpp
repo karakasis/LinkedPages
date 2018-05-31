@@ -12,7 +12,7 @@ LinkedHashEntry::LinkedHashEntry(int key, int value)
 
 LinkedHashEntry::~LinkedHashEntry()
 {
-    //dtor
+
 }
 
 int LinkedHashEntry::getKey(){

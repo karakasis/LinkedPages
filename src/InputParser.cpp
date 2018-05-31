@@ -17,10 +17,11 @@ InputParser::~InputParser()
 
 void InputParser::startLoader(std::fstream& infile){
     int _length;
-    infile.open("input.txt",std::fstream::in|std::fstream::ate);
-    //infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input.txt",std::fstream::in|std::fstream::ate);
+    infile.open("input_shuffled.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_test.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_small.txt",std::fstream::in|std::fstream::ate);
+    //infile.open("input_medium.txt",std::fstream::in|std::fstream::ate);
     //infile.open("input_v_small.txt",std::fstream::in|std::fstream::ate);
     infile.seekg(0,ios_base::end);
     _length = infile.tellg();
